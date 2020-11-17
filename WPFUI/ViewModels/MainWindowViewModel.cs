@@ -1,32 +1,72 @@
-﻿namespace WPFUI.ViewModels
+﻿using System.Collections.ObjectModel;
+using System.Threading;
+using Catel.Data;
+using Catel.MVVM;
+using Catel.Services;
+using WPFUI.Models;
+using System.Windows;
+using System;
+using Catel.IoC;
+
+namespace WPFUI.ViewModels
 {
-    using Catel.MVVM;
-    using System.Threading.Tasks;
 
     public class MainWindowViewModel : ViewModelBase
     {
-        public MainWindowViewModel()
+        private readonly IUIVisualizerService _uiVisualizerService;
+        private readonly IPleaseWaitService _pleaseWaitService;
+        private readonly IMessageService _messageService;
+        public MainWindowViewModel(IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService, IMessageService messageService)
         {
+            _uiVisualizerService = uiVisualizerService;
+            _pleaseWaitService = pleaseWaitService;
+            _messageService = messageService;
         }
 
-        public override string Title { get { return "Welcome to WPFUI"; } }
+        public override string Title { get { return "Audit Public Services"; } }
 
-        // TODO: Register models with the vmpropmodel codesnippet
-        // TODO: Register view model properties with the vmprop or vmpropviewmodeltomodel codesnippets
-        // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
 
-        protected override async Task InitializeAsync()
+        private Command _registrationCommand;
+        public Command RegistrationCommand
         {
-            await base.InitializeAsync();
-
-            // TODO: subscribe to events here
+            get
+            {
+                return _registrationCommand ?? (_registrationCommand = new Command(() =>
+                {
+                    var viewModel = new UserViewModel();
+                    
+                    _uiVisualizerService.ShowDialogAsync(viewModel, (sender, e) =>
+                    {
+                        if (e.Result ?? false)
+                        {
+                            Console.WriteLine(viewModel.UserLogin);
+                            Console.WriteLine(viewModel.UserPassword);
+                        }
+                    });
+                }));
+            }
         }
 
-        protected override async Task CloseAsync()
+        private Command _logInCommand;
+        public Command LogInCommand
         {
-            // TODO: unsubscribe from events here
+            get
+            {
+                return _logInCommand ?? (_logInCommand = new Command(() =>
+                {
+                    var viewModel = new UserViewModel();
 
-            await base.CloseAsync();
+                    _uiVisualizerService.ShowDialogAsync(viewModel, (sender, e) =>
+                    {
+                        if (e.Result ?? false)
+                        {
+                            Console.WriteLine(viewModel.UserLogin);
+                            Console.WriteLine(viewModel.UserPassword);
+                        }
+                    });
+                }));
+            }
         }
+
     }
 }
