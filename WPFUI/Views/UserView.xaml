@@ -54,7 +54,5 @@
                  VerticalAlignment="Top"
                  Text="{Binding UserPassword, UpdateSourceTrigger=PropertyChanged}"
                  TextWrapping="Wrap" />
-
-
     </Grid>
 </catel:DataWindow>

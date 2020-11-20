@@ -10,62 +10,32 @@ using Catel.IoC;
 
 namespace WPFUI.ViewModels
 {
-
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IPleaseWaitService _pleaseWaitService;
         private readonly IMessageService _messageService;
+        public UserViewModel userViewModel;
         public MainWindowViewModel(IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService, IMessageService messageService)
         {
             _uiVisualizerService = uiVisualizerService;
             _pleaseWaitService = pleaseWaitService;
             _messageService = messageService;
-        }
 
-        public override string Title { get { return "Audit Public Services"; } }
-
-
-        private Command _registrationCommand;
-        public Command RegistrationCommand
-        {
-            get
+            RegLogViewModel regLogViewModel = new RegLogViewModel(_uiVisualizerService, _pleaseWaitService, _messageService);
+            _uiVisualizerService.ShowDialogAsync(regLogViewModel, (sender, e) =>
             {
-                return _registrationCommand ?? (_registrationCommand = new Command(() =>
+                if (regLogViewModel.isUserViewModelExist == true)
                 {
-                    var viewModel = new UserViewModel();
-                    
-                    _uiVisualizerService.ShowDialogAsync(viewModel, (sender, e) =>
-                    {
-                        if (e.Result ?? false)
-                        {
-                            Console.WriteLine(viewModel.UserLogin);
-                            Console.WriteLine(viewModel.UserPassword);
-                        }
-                    });
-                }));
-            }
-        }
-
-        private Command _logInCommand;
-        public Command LogInCommand
-        {
-            get
-            {
-                return _logInCommand ?? (_logInCommand = new Command(() =>
+                    this.userViewModel = regLogViewModel.userViewModel;
+                    Console.WriteLine(userViewModel.UserLogin);
+                    Console.WriteLine(userViewModel.UserPassword);
+                }
+                else
                 {
-                    var viewModel = new UserViewModel();
-
-                    _uiVisualizerService.ShowDialogAsync(viewModel, (sender, e) =>
-                    {
-                        if (e.Result ?? false)
-                        {
-                            Console.WriteLine(viewModel.UserLogin);
-                            Console.WriteLine(viewModel.UserPassword);
-                        }
-                    });
-                }));
-            }
+                    this.CloseViewModelAsync(true);
+                }
+            });
         }
 
     }

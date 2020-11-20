@@ -2,41 +2,136 @@
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://schemas.catelproject.com"
-                  Width="400"
-                  Height="300"
+                  Width="700"
+                  Height="500"
                   ResizeMode="CanResize"
                   SizeToContent="Manual"
                   WindowStartupLocation="CenterScreen"
                   WindowState="Normal">
+    <catel:DataWindow.Resources>
 
-    <Grid x:Name="LayoutRoot">
+        <Style x:Key="ImageEnabled" TargetType="Image">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.25" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </catel:DataWindow.Resources>
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="43"/>
+            <RowDefinition Height="43" />
+            <RowDefinition Height="35"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-
-        <Label Grid.Row="0" Grid.Column="0" Content="{Binding Title}" FontSize="16" FontWeight="SemiBold" />
-        <WrapPanel
-            Grid.Row="1"
-            Grid.Column="0"
-            Orientation="Vertical">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel  Grid.Row="0"
+                     Grid.Column="0"
+                     Orientation="Vertical"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center">
+            <TextBlock  HorizontalAlignment="Center"
+                Text="Пользователь"/>
+            <Label FontSize="12" Content="{Binding UserLogin}"></Label>
+        </StackPanel>
+        <ToolBar  Grid.Row="0"
+                  Grid.Column="1">
+            <Label Margin="20,0" Content="19.11.2020" FontSize="16"/>
             <Button Width="75"
                     Height="22"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Command="{Binding RegistrationCommand}"
+                    Command="{Binding AddCommand}"
                     Focusable="False">
-                Registration
+                <Image Source="/WPFUI;component/Images/add.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
                     Height="22"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Command="{Binding LogInCommand}"
+                    Command="{Binding EditCommand}"
                     Focusable="False">
-                Log In
+                <Image Source="/WPFUI;component/Images/edit.ico" Style="{StaticResource ImageEnabled}" />
+            </Button>
+            <Button Width="75"
+                    Height="22"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding RemoveCommand}"
+                    Focusable="False">
+                <Image Source="/WPFUI;component/Images/remove.ico" Style="{StaticResource ImageEnabled}" />
+            </Button>
+            <Button Width="75"
+                    Height="22"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding RemoveCommand}"
+                    Focusable="False">
+                <Image Source="/WPFUI;component/Images/logIn.ico" Style="{StaticResource ImageEnabled}" />
+            </Button>
+        </ToolBar>
+        <WrapPanel 
+             Grid.Row="1"
+             Grid.Column="1"
+             Orientation="Horizontal"
+             Grid.RowSpan="1"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Margin="20,0">
+                <TextBlock Text="Адрес: "/>
+                <ComboBox  VerticalAlignment="Top" Style="{StaticResource ComboBoxFlatStyle}">
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Оплата: "/>
+                <ComboBox  VerticalAlignment="Top" Style="{StaticResource ComboBoxFlatStyle}"></ComboBox>
+            </StackPanel>
+        </WrapPanel>
+        <WrapPanel
+             Grid.Row="0"
+             Grid.Column="0"
+             Orientation="Vertical"
+             Grid.RowSpan="3"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center">
+            <Button Style="{StaticResource btnBlue}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock FontSize="18" >Адреса</TextBlock>
+                    <TextBlock FontSize="10">Управление адресами</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource btnBlue}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock FontSize="18" >Тарифы</TextBlock>
+                    <TextBlock FontSize="10">Управление тарифами</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource btnBlue}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock FontSize="18" >Услуги</TextBlock>
+                    <TextBlock FontSize="10">Управление услугами</TextBlock>
+                </StackPanel>
             </Button>
         </WrapPanel>
+        <ListView Grid.Row="3"
+                  Grid.Column="1"
+                  Margin="10"
+                  ItemsSource="{Binding BooksCollection}"
+                  SelectedItem="{Binding SelectedBook}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="200"
+                                    DisplayMemberBinding="{Binding Author}"
+                                    Header="Автор" />
+                    <GridViewColumn Width="200"
+                                    DisplayMemberBinding="{Binding Title}"
+                                    Header="Название" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
-    
 </catel:Window>

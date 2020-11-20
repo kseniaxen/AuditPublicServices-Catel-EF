@@ -13,7 +13,6 @@
     public partial class App : Application
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         protected override void OnStartup(StartupEventArgs e)
         {
 #if DEBUG
