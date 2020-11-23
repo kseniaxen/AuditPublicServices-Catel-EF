@@ -14,27 +14,37 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="{Binding Title}" FontSize="16" FontWeight="SemiBold" />
+        <Label  HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="0" 
+                Grid.Column="0" 
+                Content="{Binding Title}" 
+                FontSize="16" 
+                FontWeight="SemiBold" />
         <WrapPanel
             Grid.Row="1"
             Grid.Column="0"
-            Orientation="Vertical">
-            <StackPanel Orientation="Vertical" Margin="150,0,0,0">
+            Orientation="Vertical"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <StackPanel Orientation="Vertical">
                 <Button 
                     Width="100"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding RegistrationCommand}"
-                    Focusable="False" >
-                    Registration
+                    Focusable="False" 
+                    Style="{StaticResource btnBlue}">
+                    Регистрация
                 </Button>
                 <Button 
                     Width="100"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding LogInCommand}"
-                    Focusable="False">
-                    Log In
+                    Focusable="False"
+                    Style="{StaticResource btnBlue}">
+                    Вход
                 </Button>
             </StackPanel>
         </WrapPanel>

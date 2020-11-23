@@ -6,6 +6,7 @@
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Windows;
+    using PublicServicesDomain;
 
     /// <summary>
     /// Interaction logic for App.xaml

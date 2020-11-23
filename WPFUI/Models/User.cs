@@ -22,14 +22,14 @@ namespace WPFUI.Models
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
-            if (string.IsNullOrEmpty(Login))
+            if (string.IsNullOrEmpty(Login) || Login.Length > 20)
             {
-                validationResults.Add(FieldValidationResult.CreateError(LoginProperty, "Login is required"));
+                validationResults.Add(FieldValidationResult.CreateError(LoginProperty, "Неверный формат ввода логина!"));
             }
 
             if (string.IsNullOrEmpty(Password))
             {
-                validationResults.Add(FieldValidationResult.CreateError(PasswordProperty, "Password is required"));
+                validationResults.Add(FieldValidationResult.CreateError(PasswordProperty, "Неверный формат ввода пароля!"));
             }
         }
     }

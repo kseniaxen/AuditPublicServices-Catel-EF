@@ -25,7 +25,7 @@ namespace WPFUI.ViewModels
             RegLogViewModel regLogViewModel = new RegLogViewModel(_uiVisualizerService, _pleaseWaitService, _messageService);
             _uiVisualizerService.ShowDialogAsync(regLogViewModel, (sender, e) =>
             {
-                if (regLogViewModel.isUserViewModelExist == true)
+                if (regLogViewModel.isUserViewModelExist)
                 {
                     this.userViewModel = regLogViewModel.userViewModel;
                     Console.WriteLine(userViewModel.UserLogin);

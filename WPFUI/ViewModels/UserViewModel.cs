@@ -35,7 +35,6 @@ namespace WPFUI.ViewModels
         }
         public static readonly PropertyData PasswordProperty = RegisterProperty("UserPassword", typeof(string));
 
-
         public UserViewModel(User user = null)
         {
             UserObject = user ?? new User();

@@ -7,21 +7,37 @@ using WPFUI.Models;
 using System.Windows;
 using System;
 using Catel.IoC;
+using PublicServicesDomain;
+using System.Linq;
 
 namespace WPFUI.ViewModels
 {
     public class RegLogViewModel : ViewModelBase
     {
+        private ObservableCollection<PublicServicesDomain.Models.User> Users
+           = new ObservableCollection<PublicServicesDomain.Models.User>();
+
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IPleaseWaitService _pleaseWaitService;
         private readonly IMessageService _messageService;
+
         public UserViewModel userViewModel;
         public bool isUserViewModelExist = false;
+
         public RegLogViewModel(IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService, IMessageService messageService)
         { 
             _uiVisualizerService = uiVisualizerService;
             _pleaseWaitService = pleaseWaitService;
             _messageService = messageService;
+            using (var db = new PSDBContext())
+            {
+                db.Users.ToList().ForEach(
+                    a => {
+                        Console.WriteLine("Id " + a.Login + " Password " + a.Password);
+                        Users.Add(a);
+                    }
+                );
+            }
         }
 
         public override string Title { get { return "Audit Public Services"; } }
@@ -38,9 +54,24 @@ namespace WPFUI.ViewModels
                     {
                         if (e.Result ?? false)
                         {
-                            Console.WriteLine(userViewModel.UserLogin);
-                            Console.WriteLine(userViewModel.UserPassword);
-                            isUserViewModelExist = true;
+                            using (var db = new PSDBContext())
+                            {
+                                if (Users.FirstOrDefault(login => login.Login == userViewModel.UserLogin) == null)
+                                {
+                                    db.Users.Add(new PublicServicesDomain.Models.User
+                                    {
+                                        Login = userViewModel.UserLogin,
+                                        Password = userViewModel.UserPassword
+                                    });
+                                    db.SaveChanges();
+                                    _messageService.ShowAsync("Пользователь " + userViewModel.UserLogin + " создан!", "Регистрация");
+                                    isUserViewModelExist = true;
+                                }
+                                else
+                                {
+                                    _messageService.ShowAsync("Пользователь " + userViewModel.UserLogin + " уже создан! Введите другой логин!", "Регистрация");
+                                }
+                            }
                         }
                     });
                 }));
@@ -59,9 +90,22 @@ namespace WPFUI.ViewModels
                     {
                         if (e.Result ?? false)
                         {
-                            Console.WriteLine(userViewModel.UserLogin);
-                            Console.WriteLine(userViewModel.UserPassword);
-                            isUserViewModelExist = true;
+                            var user = Users.FirstOrDefault(login => login.Login == userViewModel.UserLogin);
+                             if (user != null)
+                             {
+                                if(user.Login == userViewModel.UserLogin && user.Password == userViewModel.UserPassword)
+                                {
+                                    isUserViewModelExist = true;
+                                }
+                                else
+                                {
+                                    _messageService.ShowAsync("Неверный логин или пароль!", "Вход");
+                                }
+                             }
+                             else
+                             {
+                                 _messageService.ShowAsync("Пользователь " + userViewModel.UserLogin + " не существует!", "Вход");
+                             }
                         }
                     });
                 }));
