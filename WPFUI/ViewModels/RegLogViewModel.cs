@@ -14,7 +14,7 @@ namespace WPFUI.ViewModels
 {
     public class RegLogViewModel : ViewModelBase
     {
-        private ObservableCollection<PublicServicesDomain.Models.User> Users
+        private ObservableCollection<PublicServicesDomain.Models.User> users
            = new ObservableCollection<PublicServicesDomain.Models.User>();
 
         private readonly IUIVisualizerService _uiVisualizerService;
@@ -34,7 +34,7 @@ namespace WPFUI.ViewModels
                 db.Users.ToList().ForEach(
                     a => {
                         Console.WriteLine("Id " + a.Login + " Password " + a.Password);
-                        Users.Add(a);
+                        users.Add(a);
                     }
                 );
             }
@@ -56,7 +56,7 @@ namespace WPFUI.ViewModels
                         {
                             using (var db = new PSDBContext())
                             {
-                                if (Users.FirstOrDefault(login => login.Login == userViewModel.UserLogin) == null)
+                                if (users.FirstOrDefault(login => login.Login == userViewModel.UserLogin) == null)
                                 {
                                     db.Users.Add(new PublicServicesDomain.Models.User
                                     {
@@ -90,7 +90,7 @@ namespace WPFUI.ViewModels
                     {
                         if (e.Result ?? false)
                         {
-                            var user = Users.FirstOrDefault(login => login.Login == userViewModel.UserLogin);
+                            var user = users.FirstOrDefault(login => login.Login == userViewModel.UserLogin);
                              if (user != null)
                              {
                                 if(user.Login == userViewModel.UserLogin && user.Password == userViewModel.UserPassword)

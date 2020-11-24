@@ -26,6 +26,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Images\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <None Remove="Images\**" />
+    <Page Remove="Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Catel.MVVM" Version="5.12.8" />
     <PackageReference Include="Catel.Fody" Version="4.5.0" PrivateAssets="all" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
@@ -186,4 +193,24 @@
         </ItemGroup>
     </When>
   </Choose>
+  <ItemGroup>
+    <None Remove="Resources\Icons\add.ico" />
+    <None Remove="Resources\Icons\edit.ico" />
+    <None Remove="Resources\Icons\logIn.ico" />
+    <None Remove="Resources\Icons\remove.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Icons\add.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\edit.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\logIn.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\remove.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

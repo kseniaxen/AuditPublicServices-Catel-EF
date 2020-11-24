@@ -16,6 +16,8 @@ namespace WPFUI.ViewModels
         private readonly IPleaseWaitService _pleaseWaitService;
         private readonly IMessageService _messageService;
         public UserViewModel userViewModel;
+
+        public string UserLogin { get; set; }
         public MainWindowViewModel(IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService, IMessageService messageService)
         {
             _uiVisualizerService = uiVisualizerService;
@@ -30,6 +32,7 @@ namespace WPFUI.ViewModels
                     this.userViewModel = regLogViewModel.userViewModel;
                     Console.WriteLine(userViewModel.UserLogin);
                     Console.WriteLine(userViewModel.UserPassword);
+                    UserLogin = userViewModel.UserLogin;
                 }
                 else
                 {
@@ -37,6 +40,22 @@ namespace WPFUI.ViewModels
                 }
             });
         }
+        public string CurrDate { get { return DateTime.Now.ToString("dd.MM.yyy"); } }
 
+        private Command _controlAddresses;
+        public Command ControlAddresses
+        {
+            get
+            {
+                return _controlAddresses ?? (_controlAddresses = new Command(() =>
+                {
+                    var controlAddressesViewModel = new ControlAddressesViewModel(_uiVisualizerService, _pleaseWaitService, _messageService, userViewModel);
+                    _uiVisualizerService.ShowDialogAsync(controlAddressesViewModel, (sender, e) =>
+                    {
+
+                    });
+                }));
+            }
+        }
     }
 }

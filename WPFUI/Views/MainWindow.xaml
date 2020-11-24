@@ -36,18 +36,21 @@
                      VerticalAlignment="Center">
             <TextBlock  HorizontalAlignment="Center"
                 Text="Пользователь"/>
-            <Label FontSize="12" Content="{Binding UserLogin}"></Label>
+            <Label HorizontalAlignment="Center" 
+                   FontWeight="Bold" 
+                   FontSize="14" 
+                   Content="{Binding UserLogin}"/>
         </StackPanel>
         <ToolBar  Grid.Row="0"
                   Grid.Column="1">
-            <Label Margin="20,0" Content="19.11.2020" FontSize="16"/>
+            <Label Margin="20,0" Content="{Binding CurrDate}" FontSize="16"/>
             <Button Width="75"
                     Height="22"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding AddCommand}"
                     Focusable="False">
-                <Image Source="/WPFUI;component/Images/add.ico" Style="{StaticResource ImageEnabled}" />
+                <Image Source="/WPFUI;component/Resources/Icons/add.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
                     Height="22"
@@ -55,7 +58,7 @@
                     VerticalAlignment="Center"
                     Command="{Binding EditCommand}"
                     Focusable="False">
-                <Image Source="/WPFUI;component/Images/edit.ico" Style="{StaticResource ImageEnabled}" />
+                <Image Source="/WPFUI;component/Resources/Icons/edit.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
                     Height="22"
@@ -63,7 +66,7 @@
                     VerticalAlignment="Center"
                     Command="{Binding RemoveCommand}"
                     Focusable="False">
-                <Image Source="/WPFUI;component/Images/remove.ico" Style="{StaticResource ImageEnabled}" />
+                <Image Source="/WPFUI;component/Resources/Icons/remove.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
                     Height="22"
@@ -71,7 +74,7 @@
                     VerticalAlignment="Center"
                     Command="{Binding RemoveCommand}"
                     Focusable="False">
-                <Image Source="/WPFUI;component/Images/logIn.ico" Style="{StaticResource ImageEnabled}" />
+                <Image Source="/WPFUI;component/Resources/Icons/logIn.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
         </ToolBar>
         <WrapPanel 
@@ -98,7 +101,8 @@
              Grid.RowSpan="3"
              HorizontalAlignment="Center"
              VerticalAlignment="Center">
-            <Button Style="{StaticResource btnBlue}">
+            <Button Style="{StaticResource btnBlue}"
+                    Command="{Binding ControlAddresses}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock FontSize="18" >Адреса</TextBlock>
                     <TextBlock FontSize="10">Управление адресами</TextBlock>

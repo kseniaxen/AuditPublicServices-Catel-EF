@@ -1,4 +1,4 @@
-﻿<catel:DataWindow x:Class="WPFUI.Views.UserView"
+﻿<catel:DataWindow x:Class="WPFUI.Views.AddressView"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://schemas.catelproject.com"
@@ -9,50 +9,30 @@
                   Height="200"
                   ResizeMode="CanResize"
                   SizeToContent="Manual"
-                  d:DataContext="{d:DesignInstance viewModels:UserViewModel,  IsDesignTimeCreatable=True}"
+                  d:DataContext="{d:DesignInstance viewModels:AddressViewModel,  IsDesignTimeCreatable=True}"
                   d:DesignHeight="200"
                   d:DesignWidth="450"
                   mc:Ignorable="d">
-
-    <!--  Resources  -->
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Width="46"
-               Height="26"
-               Margin="57,8,0,0"
+        <Label Height="26"
+               Margin="30,8,0,0"
                HorizontalAlignment="Left"
                VerticalAlignment="Top"
-               Content="Логин:" />
+               Content="Название:" />
         <TextBox Grid.Row="0"
                  Grid.Column="1"
                  Height="23"
                  Margin="10,10,10,0"
                  VerticalAlignment="Top"
-                 Text="{Binding UserLogin, UpdateSourceTrigger=PropertyChanged}"
-                 TextWrapping="Wrap" />
-        <Label Grid.Row="1"
-               Grid.Column="0"
-               Width="65"
-               Height="26"
-               Margin="50,8,0,0"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Top"
-               Content="Пароль:"/>
-        <TextBox Grid.Row="1"
-                 Grid.Column="1"
-                 Height="23"
-                 Margin="10,11,10,0"
-                 VerticalAlignment="Top"
-                 Text="{Binding UserPassword, UpdateSourceTrigger=PropertyChanged}"
+                 Text="{Binding AddressTitle, UpdateSourceTrigger=PropertyChanged}"
                  TextWrapping="Wrap" />
     </Grid>
 </catel:DataWindow>
+    
