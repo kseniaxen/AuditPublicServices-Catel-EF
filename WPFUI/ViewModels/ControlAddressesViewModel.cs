@@ -101,24 +101,19 @@ namespace WPFUI.ViewModels
                         { 
                             if (db.Addresses.FirstOrDefault(a => a.Title == addressViewModel.AddressTitle) == null)
                             {
-                                    var address = db.Addresses.FirstOrDefault(title => title.Title == titleTemp);
-                                    address.Title = addressViewModel.AddressTitle;
-                                    db.SaveChanges();
-                                    AddressesCollection.Clear();
-                                    db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                                    {
-                                        AddressesCollection.Add(new Address { Title = a.Title });
-                                    });
+                                var address = db.Addresses.FirstOrDefault(title => title.Title == titleTemp);
+                                address.Title = addressViewModel.AddressTitle;
+                                db.SaveChanges();
                             }
                             else
                             {
                                 _messageService.ShowAsync("Такой адрес уже существует!", "Редактирование адреса");
-                                AddressesCollection.Clear();
-                                db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                                {
-                                    AddressesCollection.Add(new Address { Title = a.Title });
-                                });
                             }
+                            AddressesCollection.Clear();
+                            db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
+                            {
+                                AddressesCollection.Add(new Address { Title = a.Title });
+                            });
                         };
                     });
                     
