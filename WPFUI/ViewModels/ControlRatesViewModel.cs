@@ -161,7 +161,7 @@ namespace WPFUI.ViewModels
             {
                 return _removeCommand ?? (_removeCommand = new Command(async () =>
                 {
-                    if (await _messageService.ShowAsync("Вы действительно хотите удалить адрес?", "Внимание!",
+                    if (await _messageService.ShowAsync("Вы действительно хотите удалить тариф?", "Внимание!",
                         MessageButton.YesNo, MessageImage.Warning) != MessageResult.Yes)
                     {
                         return;

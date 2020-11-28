@@ -115,7 +115,8 @@
                     <TextBlock FontSize="10">Управление тарифами</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Style="{StaticResource btnBlue}">
+            <Button Style="{StaticResource btnBlue}"
+                    Command="{Binding ControlServices}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock FontSize="18" >Услуги</TextBlock>
                     <TextBlock FontSize="10">Управление услугами</TextBlock>

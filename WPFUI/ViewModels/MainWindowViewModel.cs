@@ -67,5 +67,18 @@ namespace WPFUI.ViewModels
                 }));
             }
         }
+
+        private Command _controlService;
+        public Command ControlServices
+        {
+            get
+            {
+                return _controlService ?? (_controlService = new Command(() =>
+                {
+                    var controlServicesViewModel = new ControlServicesViewModel(_uiVisualizerService, _pleaseWaitService, _messageService, userViewModel);
+                    _uiVisualizerService.ShowDialogAsync(controlServicesViewModel);
+                }));
+            }
+        }
     }
 }

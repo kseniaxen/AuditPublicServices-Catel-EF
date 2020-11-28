@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WPFUI.Models
 {
-    public class Address: ValidatableModelBase
+    public class Service : ValidatableModelBase
     {
         public string Title
         {
@@ -16,7 +16,7 @@ namespace WPFUI.Models
         {
             if (string.IsNullOrEmpty(Title))
             {
-                validationResults.Add(FieldValidationResult.CreateError(TitleProperty, "Неверный формат ввода адреса!"));
+                validationResults.Add(FieldValidationResult.CreateError(TitleProperty, "Неверный формат ввода услуги!"));
             }
         }
     }
