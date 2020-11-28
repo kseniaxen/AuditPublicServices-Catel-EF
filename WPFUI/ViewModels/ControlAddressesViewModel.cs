@@ -94,14 +94,14 @@ namespace WPFUI.ViewModels
                 return _editCommand ?? (_editCommand = new Command(() =>
                 {
                     var addressViewModel = new AddressViewModel(SelectedAddress);
-                    string titleTemp = SelectedAddress.Title;
+                    string titlePrev = SelectedAddress.Title;
                     _uiVisualizerService.ShowDialogAsync(addressViewModel, (sender, e) =>
                     { 
                         using (var db = new PSDBContext())
                         { 
-                            if (db.Addresses.FirstOrDefault(a => a.Title == addressViewModel.AddressTitle) == null)
+                            if (db.Addresses.FirstOrDefault(a => a.Title == addressViewModel.AddressTitle) == null || titlePrev == addressViewModel.AddressTitle)
                             {
-                                var address = db.Addresses.FirstOrDefault(title => title.Title == titleTemp);
+                                var address = db.Addresses.FirstOrDefault(title => title.Title == titlePrev);
                                 address.Title = addressViewModel.AddressTitle;
                                 db.SaveChanges();
                             }

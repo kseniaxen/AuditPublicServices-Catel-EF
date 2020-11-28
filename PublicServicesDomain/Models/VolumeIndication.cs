@@ -14,7 +14,7 @@ namespace PublicServicesDomain.Models
         public Service Service { get; set; }
         public double PrevIndication { get; set; }
         public double CurIndication { get; set; }
-        public double Total { get; set; }
+        public decimal Total { get; set; }
         public string DatePaid { get; set; }
     }
 }

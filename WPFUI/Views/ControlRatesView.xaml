@@ -1,4 +1,4 @@
-﻿<catel:DataWindow x:Class="WPFUI.Views.ControlAddressesView"
+﻿<catel:DataWindow x:Class="WPFUI.Views.ControlRatesView"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://schemas.catelproject.com"
@@ -8,7 +8,7 @@
                   SizeToContent="Manual"
                   WindowStartupLocation="CenterScreen"
                   WindowState="Normal">
-    
+
     <catel:DataWindow.Resources>
 
         <Style x:Key="ImageEnabled" TargetType="Image">
@@ -53,13 +53,19 @@
         </ToolBar>
         <ListView Grid.Row="1"
                   Margin="10"
-                  ItemsSource="{Binding AddressesCollection}"
-                  SelectedItem="{Binding SelectedAddress}">
+                  ItemsSource="{Binding RatesCollection}"
+                  SelectedItem="{Binding SelectedRate}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="200"
                                     DisplayMemberBinding="{Binding Title}"
-                                    Header="Адрес" />
+                                    Header="Название" />
+                    <GridViewColumn Width="150"
+                                    DisplayMemberBinding="{Binding MeasureTitle}"
+                                    Header="Единица измерения" />
+                    <GridViewColumn Width="100"
+                                    DisplayMemberBinding="{Binding Price}"
+                                    Header="Цена" />
                 </GridView>
             </ListView.View>
         </ListView>

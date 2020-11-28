@@ -50,10 +50,20 @@ namespace WPFUI.ViewModels
                 return _controlAddresses ?? (_controlAddresses = new Command(() =>
                 {
                     var controlAddressesViewModel = new ControlAddressesViewModel(_uiVisualizerService, _pleaseWaitService, _messageService, userViewModel);
-                    _uiVisualizerService.ShowDialogAsync(controlAddressesViewModel, (sender, e) =>
-                    {
+                    _uiVisualizerService.ShowDialogAsync(controlAddressesViewModel);
+                }));
+            }
+        }
 
-                    });
+        private Command _controlRates;
+        public Command ControlRates
+        {
+            get
+            {
+                return _controlRates ?? (_controlRates = new Command(() =>
+                {
+                    var controlRatesViewModel = new ControlRatesViewModel(_uiVisualizerService, _pleaseWaitService, _messageService, userViewModel);
+                    _uiVisualizerService.ShowDialogAsync(controlRatesViewModel);
                 }));
             }
         }

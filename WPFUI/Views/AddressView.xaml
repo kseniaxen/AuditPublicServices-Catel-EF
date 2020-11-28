@@ -22,7 +22,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Label Height="26"
-               Margin="30,8,0,0"
+               Margin="0,8,0,0"
                HorizontalAlignment="Left"
                VerticalAlignment="Top"
                Content="Название:" />

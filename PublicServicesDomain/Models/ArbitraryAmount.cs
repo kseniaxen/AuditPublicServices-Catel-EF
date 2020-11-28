@@ -12,7 +12,7 @@ namespace PublicServicesDomain.Models
         public Rate Rate { get; set; }
         public Address Address { get; set; }
         public Service Service { get; set; }
-        public double Total { get; set; }
+        public decimal Total { get; set; }
         public string DatePaid { get; set; }
     }
 }

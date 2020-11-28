@@ -108,7 +108,8 @@
                     <TextBlock FontSize="10">Управление адресами</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Style="{StaticResource btnBlue}">
+            <Button Style="{StaticResource btnBlue}"
+                    Command="{Binding ControlRates}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock FontSize="18" >Тарифы</TextBlock>
                     <TextBlock FontSize="10">Управление тарифами</TextBlock>

@@ -124,6 +124,10 @@
     <Compile Include="Migrations\202011231528096_init.designer.cs">
       <DependentUpon>202011231528096_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011261437282_decimal money.cs" />
+    <Compile Include="Migrations\202011261437282_decimal money.designer.cs">
+      <DependentUpon>202011261437282_decimal money.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\ArbitraryAmount.cs" />
@@ -141,6 +145,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202011231528096_init.resx">
       <DependentUpon>202011231528096_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011261437282_decimal money.resx">
+      <DependentUpon>202011261437282_decimal money.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
