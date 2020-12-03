@@ -6,62 +6,56 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:viewModels="clr-namespace:WPFUI.ViewModels"
                   Width="450"
-                  Height="250"
+                  Height="225"
                   ResizeMode="CanResize"
                   SizeToContent="Manual"
                   d:DataContext="{d:DesignInstance viewModels:RateViewModel,  IsDesignTimeCreatable=True}"
-                  d:DesignHeight="250"
+                  d:DesignHeight="225"
                   d:DesignWidth="450"
                   mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
+            <RowDefinition MinHeight="40" />
+            <RowDefinition MinHeight="40" />
+            <RowDefinition MinHeight="40" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Label Height="26"
-               Margin="0,8,0,0"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Top"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
                Content="Название:" />
         <TextBox Grid.Row="0"
                  Grid.Column="1"
                  Height="23"
-                 Margin="10,10,10,0"
-                 VerticalAlignment="Top"
+                 Margin="10,0"
+                 VerticalAlignment="Center"
                  Text="{Binding RateTitle, UpdateSourceTrigger=PropertyChanged}"
                  TextWrapping="Wrap" />
         <Label Grid.Row="1"
                Grid.Column="0"
-               Height="26"
-               Margin="0,8,0,0"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Top"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
                Content="Единица измерения:"/>
         <TextBox Grid.Row="1"
                  Grid.Column="1"
                  Height="23"
-                 Margin="10,11,10,0"
-                 VerticalAlignment="Top"
+                 Margin="10,0"
+                 VerticalAlignment="Center"
                  Text="{Binding RateMeasureTitle, UpdateSourceTrigger=PropertyChanged}"
                  TextWrapping="Wrap" />
         <Label Grid.Row="2"
                Grid.Column="0"
-               Height="26"
-               Margin="0,8,0,0"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Top"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
                Content="Цена за единицу:"/>
         <TextBox Grid.Row="2"
                  Grid.Column="1"
                  Height="23"
-                 Margin="10,11,10,0"
-                 VerticalAlignment="Top"
+                 Margin="10,0"
+                 VerticalAlignment="Center"
                  Text="{Binding RatePrice, UpdateSourceTrigger=PropertyChanged}"
                  TextWrapping="Wrap" />
     </Grid>

@@ -80,5 +80,58 @@ namespace WPFUI.ViewModels
                 }));
             }
         }
+
+        private Command _addCommand;
+        public Command AddCommand
+        {
+            get
+            {
+                return _addCommand ?? (_addCommand = new Command(() =>
+                {
+                    ObservableCollection<Address> obs = new ObservableCollection<Address>
+                    {
+                        new Address
+                        {
+                            Title = "Address 1"
+                        },
+                        new Address
+                        {
+                            Title = "Address 2"
+                        },
+                        new Address
+                        {
+                            Title = "Address 3"
+                        }
+                    };
+
+                    ObservableCollection<Service> obsS = new ObservableCollection<Service>
+                    {
+                        new Service
+                        {
+                            Title = "Service 1"
+                        },
+                        new Service
+                        {
+                            Title = "Service 2"
+                        },
+                        new Service
+                        {
+                            Title = "Service 3"
+                        }
+                    };
+                    var VIViewModel = new VolumeIndicationViewModel(null, obs, obsS);
+
+                    _uiVisualizerService.ShowDialogAsync(VIViewModel, (sender, e) =>
+                    {
+                        if(e.Result ?? false)
+                        {
+                            Console.WriteLine("Address = " + VIViewModel.VISelectedAddress.Title);
+                            Console.WriteLine("Service = " + VIViewModel.VISelectedService.Title);
+                        }
+                    });
+
+                }));
+            }
+        }
     }
 }

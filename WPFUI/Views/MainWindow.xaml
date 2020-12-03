@@ -126,16 +126,24 @@
         <ListView Grid.Row="3"
                   Grid.Column="1"
                   Margin="10"
-                  ItemsSource="{Binding BooksCollection}"
-                  SelectedItem="{Binding SelectedBook}">
+                  ItemsSource="{Binding ObjCollection}"
+                  SelectedItem="{Binding SelectedObj}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="200"
-                                    DisplayMemberBinding="{Binding Author}"
-                                    Header="Автор" />
-                    <GridViewColumn Width="200"
-                                    DisplayMemberBinding="{Binding Title}"
-                                    Header="Название" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Address}"
+                                    Header="Адрес" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Rate}"
+                                    Header="Тариф" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Service}"
+                                    Header="Услуга" />
+                    <GridViewColumn DisplayMemberBinding="{Binding PrevIndication}"
+                                    Header="Предыдущее показание" />
+                    <GridViewColumn DisplayMemberBinding="{Binding CurIndication}"
+                                    Header="Текущее показание" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Total}"
+                                    Header="Всего" />
+                    <GridViewColumn DisplayMemberBinding="{Binding DatePaid}"
+                                    Header="Дата" />
                 </GridView>
             </ListView.View>
         </ListView>
