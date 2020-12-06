@@ -128,6 +128,18 @@
     <Compile Include="Migrations\202011261437282_decimal money.designer.cs">
       <DependentUpon>202011261437282_decimal money.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012041607537_Datetime for datepaid.cs" />
+    <Compile Include="Migrations\202012041607537_Datetime for datepaid.designer.cs">
+      <DependentUpon>202012041607537_Datetime for datepaid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202012041916190_Add user in VolumeIndication.cs" />
+    <Compile Include="Migrations\202012041916190_Add user in VolumeIndication.designer.cs">
+      <DependentUpon>202012041916190_Add user in VolumeIndication.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202012042139544_int in prev and cur indication.cs" />
+    <Compile Include="Migrations\202012042139544_int in prev and cur indication.designer.cs">
+      <DependentUpon>202012042139544_int in prev and cur indication.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\ArbitraryAmount.cs" />
@@ -148,6 +160,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011261437282_decimal money.resx">
       <DependentUpon>202011261437282_decimal money.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012041607537_Datetime for datepaid.resx">
+      <DependentUpon>202012041607537_Datetime for datepaid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012041916190_Add user in VolumeIndication.resx">
+      <DependentUpon>202012041916190_Add user in VolumeIndication.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012042139544_int in prev and cur indication.resx">
+      <DependentUpon>202012042139544_int in prev and cur indication.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

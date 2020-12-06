@@ -126,24 +126,24 @@
         <ListView Grid.Row="3"
                   Grid.Column="1"
                   Margin="10"
-                  ItemsSource="{Binding ObjCollection}"
-                  SelectedItem="{Binding SelectedObj}">
+                  ItemsSource="{Binding VICollection}"
+                  SelectedItem="{Binding SelectedVI}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Address}"
+                    <GridViewColumn DisplayMemberBinding="{Binding SelectedAddress.Title}"
                                     Header="Адрес" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Rate}"
+                    <GridViewColumn DisplayMemberBinding="{Binding SelectedRate.Title}"
                                     Header="Тариф" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Service}"
+                    <GridViewColumn DisplayMemberBinding="{Binding SelectedService.Title}"
                                     Header="Услуга" />
                     <GridViewColumn DisplayMemberBinding="{Binding PrevIndication}"
-                                    Header="Предыдущее показание" />
+                                    Header="Пред. показание" />
                     <GridViewColumn DisplayMemberBinding="{Binding CurIndication}"
-                                    Header="Текущее показание" />
+                                    Header="Текущ. показание" />
                     <GridViewColumn DisplayMemberBinding="{Binding Total}"
                                     Header="Всего" />
-                    <GridViewColumn DisplayMemberBinding="{Binding DatePaid}"
-                                    Header="Дата" />
+                    <GridViewColumn DisplayMemberBinding="{Binding SelectedDate, StringFormat='dd.MM.yyyy'}"
+                                    Header="Дата оплаты" />
                 </GridView>
             </ListView.View>
         </ListView>

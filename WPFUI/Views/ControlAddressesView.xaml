@@ -59,7 +59,7 @@
                 <GridView>
                     <GridViewColumn Width="200"
                                     DisplayMemberBinding="{Binding Title}"
-                                    Header="Адрес" />
+                                    Header="Название" />
                 </GridView>
             </ListView.View>
         </ListView>

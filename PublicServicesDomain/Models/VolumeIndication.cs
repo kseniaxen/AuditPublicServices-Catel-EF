@@ -12,9 +12,10 @@ namespace PublicServicesDomain.Models
         public Rate Rate { get; set; }
         public Address Address { get; set; }
         public Service Service { get; set; }
-        public double PrevIndication { get; set; }
-        public double CurIndication { get; set; }
+        public int PrevIndication { get; set; }
+        public int CurIndication { get; set; }
         public decimal Total { get; set; }
-        public string DatePaid { get; set; }
+        public DateTime DatePaid { get; set; }
+        public User User { get; set; }
     }
 }

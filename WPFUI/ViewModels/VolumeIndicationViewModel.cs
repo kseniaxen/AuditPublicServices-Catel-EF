@@ -18,6 +18,7 @@ namespace WPFUI.ViewModels
         }
         public static readonly PropertyData VIObjectProperty = RegisterProperty("VIObject", typeof(VolumeIndication));
 
+
         [ViewModelToModel("VIObject", "SelectedAddress")]
         public Address VISelectedAddress
         {
@@ -26,8 +27,9 @@ namespace WPFUI.ViewModels
         }
         public static readonly PropertyData VISelectedAddressProperty = RegisterProperty("VISelectedAddress", typeof(Address));
 
-        [ViewModelToModel("VIObject", "AddressesCollection")]
+        //[ViewModelToModel("VIObject", "AddressesCollection")]
         public ObservableCollection<Address> VIAddressesCollection { get; set; }
+
 
         [ViewModelToModel("VIObject", "SelectedService")]
         public Service VISelectedService
@@ -37,11 +39,58 @@ namespace WPFUI.ViewModels
         }
         public static readonly PropertyData VISelectedServiceProperty = RegisterProperty("VISelectedService", typeof(Service));
 
-        [ViewModelToModel("VIObject", "ServicesCollection")]
+        //[ViewModelToModel("VIObject", "ServicesCollection")]
         public ObservableCollection<Service> VIServicesCollection { get; set; }
-        public VolumeIndicationViewModel(VolumeIndication volumeIndication = null, ObservableCollection<Address> addressCol=null, ObservableCollection<Service> serviceCol = null)
+
+
+        [ViewModelToModel("VIObject", "SelectedRate")]
+        public Rate VISelectedRate
         {
-            VIObject = volumeIndication ?? new VolumeIndication(addressCol, serviceCol);
+            get { return GetValue<Rate>(VISelectedRateProperty); }
+            set { SetValue(VISelectedRateProperty, value); }
+        }
+        public static readonly PropertyData VISelectedRateProperty = RegisterProperty("VISelectedRate", typeof(Rate));
+
+        //[ViewModelToModel("VIObject", "RatesCollection")]
+        public ObservableCollection<Rate> VIRatesCollection { get; set; }
+
+        [ViewModelToModel("VIObject", "PrevIndication")]
+        public string VIPrevIndication
+        {
+            get { return GetValue<string>(PrevIndicationProperty); }
+            set { SetValue(PrevIndicationProperty, value); }
+        }
+        public static readonly PropertyData PrevIndicationProperty = RegisterProperty("VIPrevIndication", typeof(string));
+
+        [ViewModelToModel("VIObject", "CurIndication")]
+        public string VICurIndication
+        {
+            get { return GetValue<string>(CurIndicationProperty); }
+            set { SetValue(CurIndicationProperty, value); }
+        }
+        public static readonly PropertyData CurIndicationProperty = RegisterProperty("VICurIndication", typeof(string));
+
+        [ViewModelToModel("VIObject", "Total")]
+        public string VITotal
+        {
+            get;set;
+        }
+
+        [ViewModelToModel("VIObject", "SelectedDate")]
+        public DateTime VISelectedDate
+        {
+            get { return GetValue<DateTime>(SelectedDateProperty); }
+            set { SetValue(SelectedDateProperty, value); }
+        }
+        public static readonly PropertyData SelectedDateProperty = RegisterProperty("VISelectedDate", typeof(DateTime));
+
+        public VolumeIndicationViewModel(VolumeIndication volumeIndication = null, ObservableCollection<Address> addressCol=null, ObservableCollection<Service> serviceCol = null, ObservableCollection<Rate> rateCol = null)
+        {
+            VIObject = volumeIndication ?? new VolumeIndication();
+            VIAddressesCollection = addressCol;
+            VIServicesCollection = serviceCol;
+            VIRatesCollection = rateCol;
+                //new VolumeIndication(addressCol, serviceCol, rateCol);
         }
     }
 }
