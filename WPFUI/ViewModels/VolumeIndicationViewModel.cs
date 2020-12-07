@@ -18,6 +18,11 @@ namespace WPFUI.ViewModels
         }
         public static readonly PropertyData VIObjectProperty = RegisterProperty("VIObject", typeof(VolumeIndication));
 
+        [ViewModelToModel("VIObject", "Id")]
+        public int VIId
+        {
+            get; set;
+        }
 
         [ViewModelToModel("VIObject", "SelectedAddress")]
         public Address VISelectedAddress
@@ -27,7 +32,6 @@ namespace WPFUI.ViewModels
         }
         public static readonly PropertyData VISelectedAddressProperty = RegisterProperty("VISelectedAddress", typeof(Address));
 
-        //[ViewModelToModel("VIObject", "AddressesCollection")]
         public ObservableCollection<Address> VIAddressesCollection { get; set; }
 
 
@@ -39,7 +43,6 @@ namespace WPFUI.ViewModels
         }
         public static readonly PropertyData VISelectedServiceProperty = RegisterProperty("VISelectedService", typeof(Service));
 
-        //[ViewModelToModel("VIObject", "ServicesCollection")]
         public ObservableCollection<Service> VIServicesCollection { get; set; }
 
 
@@ -51,7 +54,6 @@ namespace WPFUI.ViewModels
         }
         public static readonly PropertyData VISelectedRateProperty = RegisterProperty("VISelectedRate", typeof(Rate));
 
-        //[ViewModelToModel("VIObject", "RatesCollection")]
         public ObservableCollection<Rate> VIRatesCollection { get; set; }
 
         [ViewModelToModel("VIObject", "PrevIndication")]
@@ -90,7 +92,6 @@ namespace WPFUI.ViewModels
             VIAddressesCollection = addressCol;
             VIServicesCollection = serviceCol;
             VIRatesCollection = rateCol;
-                //new VolumeIndication(addressCol, serviceCol, rateCol);
         }
     }
 }

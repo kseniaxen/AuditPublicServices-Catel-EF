@@ -25,19 +25,7 @@ namespace WPFUI.ViewModels
             _pleaseWaitService = pleaseWaitService;
             _messageService = messageService;
             RatesCollection = new ObservableCollection<Rate>();
-            using (var db = new PSDBContext())
-            {
-                var ratesDb = db.Rates.Where(login => login.User.Login == userViewModel.UserLogin);
-                foreach (var rate in ratesDb)
-                {
-                    RatesCollection.Add(new Rate
-                    {
-                        Title = rate.Title,
-                        MeasureTitle = rate.MeasureTitle,
-                        Price = rate.Price.ToString()
-                    });
-                }
-            }
+            writeDataInList();
         }
 
         public ObservableCollection<Rate> RatesCollection
@@ -80,16 +68,7 @@ namespace WPFUI.ViewModels
                                             User = db.Users.FirstOrDefault(login => login.Login == userViewModel.UserLogin)
                                         });
                                         db.SaveChanges();
-                                        RatesCollection.Clear();
-                                        db.Rates.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                                        {
-                                            RatesCollection.Add(new Rate
-                                            {
-                                                Title = a.Title,
-                                                MeasureTitle = a.MeasureTitle,
-                                                Price = a.Price.ToString()
-                                            });
-                                        });
+                                        writeDataInList();
                                     }
                                 }
                                 else
@@ -117,38 +96,32 @@ namespace WPFUI.ViewModels
                     string titlePrev = SelectedRate.Title;
                     _uiVisualizerService.ShowDialogAsync(rateViewModel, (sender, e) =>
                     {
-                        using (var db = new PSDBContext())
+                        if (e.Result ?? false)
                         {
-                            if (db.Rates.FirstOrDefault(a => a.Title == rateViewModel.RateTitle) == null || titlePrev == rateViewModel.RateTitle)
+                            using (var db = new PSDBContext())
                             {
-                                if (isValidNumber(rateViewModel.RatePrice))
+                                if (db.Rates.FirstOrDefault(a => a.Title == rateViewModel.RateTitle) == null || titlePrev == rateViewModel.RateTitle)
                                 {
-                                    var rate = db.Rates.FirstOrDefault(title => title.Title == titlePrev);
-                                    rate.Title = rateViewModel.RateTitle;
-                                    rate.MeasureTitle = rateViewModel.RateMeasureTitle;
-                                    rate.Price = parsePrice(rateViewModel.RatePrice);
-                                    db.SaveChanges();
+                                    if (isValidNumber(rateViewModel.RatePrice))
+                                    {
+                                        var rate = db.Rates.FirstOrDefault(title => title.Title == titlePrev);
+                                        rate.Title = rateViewModel.RateTitle;
+                                        rate.MeasureTitle = rateViewModel.RateMeasureTitle;
+                                        rate.Price = parsePrice(rateViewModel.RatePrice);
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        _messageService.ShowAsync("Цена не должна быть отрицательной или равна 0!", "Редактирование тарифа");
+                                    }
                                 }
                                 else
                                 {
-                                    _messageService.ShowAsync("Цена не должна быть отрицательной или равна 0!", "Редактирование тарифа");
+                                    _messageService.ShowAsync("Такой тариф уже существует!", "Редактирование тарифа");
                                 }
-                            }
-                            else
-                            {
-                                _messageService.ShowAsync("Такой тариф уже существует!", "Редактирование тарифа");
-                            }
-                            RatesCollection.Clear();
-                            db.Rates.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                            {
-                                RatesCollection.Add(new Rate
-                                {
-                                    Title = a.Title,
-                                    MeasureTitle = a.MeasureTitle,
-                                    Price = a.Price.ToString()
-                                });
-                            });
-                        };
+                                writeDataInList();
+                            };
+                        }
                     });
 
                 }, () => SelectedRate != null));
@@ -173,16 +146,7 @@ namespace WPFUI.ViewModels
                         var rate = db.Rates.FirstOrDefault(title => title.Title == SelectedRate.Title);
                         db.Rates.Remove(rate);
                         db.SaveChanges();
-                        RatesCollection.Clear();
-                        db.Rates.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                        {
-                            RatesCollection.Add(new Rate
-                            {
-                                Title = a.Title,
-                                MeasureTitle = a.MeasureTitle,
-                                Price = a.Price.ToString()
-                            });
-                        });
+                        writeDataInList();
                     };
                     RatesCollection.Remove(SelectedRate);
 
@@ -191,14 +155,30 @@ namespace WPFUI.ViewModels
                 () => SelectedRate != null));
             }
         }
-        public bool isValidNumber(string price)
+        private bool isValidNumber(string price)
         {
             return Decimal.Parse(price) >= 0; 
         }
-        public decimal parsePrice(string price)
+        private decimal parsePrice(string price)
         {
             decimal result = Decimal.Parse(price);
             return Decimal.Round(result, 2);
+        }
+        private void writeDataInList()
+        {
+            using (var db = new PSDBContext())
+            {
+                RatesCollection.Clear();
+                db.Rates.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
+                {
+                    RatesCollection.Add(new Rate
+                    {
+                        Title = a.Title,
+                        MeasureTitle = a.MeasureTitle,
+                        Price = a.Price.ToString()
+                    });
+                });
+            }
         }
     }
 }

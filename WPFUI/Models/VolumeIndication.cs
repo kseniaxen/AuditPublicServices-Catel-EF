@@ -9,6 +9,7 @@ namespace WPFUI.Models
 {
     public class VolumeIndication : ValidatableModelBase
     {
+        public int Id { get; set; }
         public Address SelectedAddress 
         { 
             get { return GetValue<Address>(SelectedAddressProperty); }
@@ -44,9 +45,7 @@ namespace WPFUI.Models
         }
         public static readonly PropertyData CurIndicationProperty = RegisterProperty("CurIndication", typeof(string));
 
-        public string Total {
-            get;set;
-        }
+        public string Total { get;set; }
 
         public DateTime SelectedDate
         {

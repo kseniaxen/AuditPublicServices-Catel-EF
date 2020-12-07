@@ -36,7 +36,7 @@ namespace WPFUI.ViewModels
                     AddressesCollection = new ObservableCollection<Address>();
                     RatesCollection = new ObservableCollection<Rate>();
                     ServicesCollection = new ObservableCollection<Service>();
-                    reWriteDataInTable();
+                    writeDataInTable();
                 }
                 else
                 {
@@ -76,18 +76,7 @@ namespace WPFUI.ViewModels
                     {
                         if (e.Result ?? false)
                         {
-                            using (var db = new PSDBContext())
-                            {
-                                AddressesCollection.Clear();
-                                var addressDb = db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin);
-                                foreach (var ad in addressDb)
-                                {
-                                    AddressesCollection.Add(new Address
-                                    {
-                                        Title = ad.Title
-                                    });
-                                }
-                            }
+                            writeDataInTable();
                         }
                     });
                 }));
@@ -106,17 +95,7 @@ namespace WPFUI.ViewModels
                     {
                         using (var db = new PSDBContext())
                         {
-                            RatesCollection.Clear();
-                            var rateDb = db.Rates.Where(login => login.User.Login == userViewModel.UserLogin);
-                            foreach (var ra in rateDb)
-                            {
-                                RatesCollection.Add(new Rate
-                                {
-                                    Title = ra.Title,
-                                    MeasureTitle = ra.MeasureTitle,
-                                    Price = ra.Price.ToString()
-                                });
-                            }
+                            writeDataInTable();
                         }
                     });
 
@@ -136,15 +115,7 @@ namespace WPFUI.ViewModels
                     {
                         using (var db = new PSDBContext())
                         {
-                            ServicesCollection.Clear();
-                            var serviceDb = db.Services.Where(login => login.User.Login == userViewModel.UserLogin);
-                            foreach (var se in serviceDb)
-                            {
-                                ServicesCollection.Add(new Service
-                                {
-                                    Title = se.Title
-                                });
-                            }
+                            writeDataInTable();
                         }
                     });
 
@@ -183,7 +154,7 @@ namespace WPFUI.ViewModels
                                         User = db.Users.FirstOrDefault(login => login.Login == userViewModel.UserLogin)
                                     });
                                     db.SaveChanges();
-                                    reWriteDataInTable();
+                                    writeDataInTable();
                                 }
                             }
                             else
@@ -198,65 +169,113 @@ namespace WPFUI.ViewModels
             }
         }
 
-        private void reWriteAddressesCollection(PSDBContext db)
+        private Command _editCommand;
+        public Command EditCommand
         {
-
-            AddressesCollection.Clear();
-            db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
-                AddressesCollection.Add(new Address
+            get
+            {
+                return _editCommand ?? (_editCommand = new Command(() =>
                 {
-                    Title = ad.Title
-                })
-            );
+                    var VIViewModel = new VolumeIndicationViewModel(SelectedVI, AddressesCollection, ServicesCollection, RatesCollection);
+                    int viPrevId = SelectedVI.Id;
+                    _uiVisualizerService.ShowDialogAsync(VIViewModel, (sender, e) =>
+                    {
+                        if (e.Result ?? false)
+                        {
+                            if (Int32.Parse(VIViewModel.VICurIndication) >= Int32.Parse(VIViewModel.VIPrevIndication))
+                            {
+                                using (var db = new PSDBContext())
+                                {
+                                    var viCurr = db.VolumeIndications.FirstOrDefault(id => id.Id == viPrevId);
+                                    viCurr.Address = db.Addresses.FirstOrDefault(ad => ad.Title == VIViewModel.VISelectedAddress.Title);
+                                    viCurr.Service = db.Services.FirstOrDefault(ser => ser.Title == VIViewModel.VISelectedService.Title);
+                                    viCurr.Rate = db.Rates.FirstOrDefault(rate => rate.Title == VIViewModel.VISelectedRate.Title);
+                                    viCurr.PrevIndication = Int32.Parse(VIViewModel.VIPrevIndication);
+                                    viCurr.CurIndication = Int32.Parse(VIViewModel.VICurIndication);
+                                    viCurr.Total = Convert.ToDecimal((Int32.Parse(VIViewModel.VICurIndication) - Int32.Parse(VIViewModel.VIPrevIndication)) * Convert.ToDecimal(VIViewModel.VISelectedRate.Price));
+                                    viCurr.DatePaid = VIViewModel.VISelectedDate;
+                                    db.SaveChanges();  
+                                }
+                            }
+                        }
+                        writeDataInTable();
+                    });
+                }, () => SelectedVI != null));
+            }
+        }
 
-        }
-        private void reWriteServicesCollection(PSDBContext db)
+        private Command _removeCommand;
+        public Command RemoveCommand
         {
-            ServicesCollection.Clear();
-            db.Services.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
-                 ServicesCollection.Add(new Service
-                 {
-                     Title = ad.Title
-                 })
-            );
-        }
-        private void reWriteRatesCollection(PSDBContext db)
-        {
-            RatesCollection.Clear();
-            db.Rates.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
-                 RatesCollection.Add(new Rate
-                 {
-                     Title = ad.Title,
-                     MeasureTitle = ad.MeasureTitle,
-                     Price = ad.Price.ToString()
-                 })
-            );
-        }
-        private void reWriteVICollection(PSDBContext db)
-        {
-            VICollection.Clear();
-            db.VolumeIndications.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(vi =>
-                 VICollection.Add(new VolumeIndication
-                 {
-                     SelectedAddress = AddressesCollection.FirstOrDefault(adcol => adcol.Title == vi.Address.Title),
-                     SelectedService = ServicesCollection.FirstOrDefault(adcol => adcol.Title == vi.Service.Title),
-                     SelectedRate = RatesCollection.FirstOrDefault(adcol => adcol.Title == vi.Rate.Title),
-                     PrevIndication = vi.PrevIndication.ToString(),
-                     CurIndication = vi.CurIndication.ToString(),
-                     Total = vi.Total.ToString(),
-                     SelectedDate = vi.DatePaid
-                 }
-            ));
+            get
+            {
+                return _removeCommand ?? (_removeCommand = new Command(async () =>
+                {
+                    if (await _messageService.ShowAsync("Вы действительно хотите удалить эту запись?", "Внимание!",
+                       MessageButton.YesNo, MessageImage.Warning) != MessageResult.Yes)
+                    {
+                        return;
+                    }
 
+                    _pleaseWaitService.Show("Удаление записи...");
+                    using (var db = new PSDBContext())
+                    {
+                        var viCurr = db.VolumeIndications.FirstOrDefault(id => id.Id == SelectedVI.Id);
+                        db.VolumeIndications.Remove(viCurr);
+                        db.SaveChanges();
+                        writeDataInTable();
+                    };
+                    VICollection.Remove(SelectedVI);
+
+                    _pleaseWaitService.Hide();
+                },()=> SelectedVI != null));
+            }
         }
-        public void reWriteDataInTable()
+
+        public void writeDataInTable()
         {
             using (var db = new PSDBContext())
             {
-                reWriteAddressesCollection(db);
-                reWriteServicesCollection(db);
-                reWriteRatesCollection(db);
-                reWriteVICollection(db);
+                AddressesCollection.Clear();
+                db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
+                    AddressesCollection.Add(new Address
+                    {
+                        Title = ad.Title
+                    })
+                );
+
+                ServicesCollection.Clear();
+                db.Services.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
+                     ServicesCollection.Add(new Service
+                     {
+                         Title = ad.Title
+                     })
+                );
+
+                RatesCollection.Clear();
+                db.Rates.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
+                     RatesCollection.Add(new Rate
+                     {
+                         Title = ad.Title,
+                         MeasureTitle = ad.MeasureTitle,
+                         Price = ad.Price.ToString()
+                     })
+                );
+
+                VICollection.Clear();
+                db.VolumeIndications.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(vi =>
+                     VICollection.Add(new VolumeIndication
+                     {
+                         SelectedAddress = AddressesCollection.FirstOrDefault(adcol => adcol.Title == vi.Address.Title),
+                         SelectedService = ServicesCollection.FirstOrDefault(adcol => adcol.Title == vi.Service.Title),
+                         SelectedRate = RatesCollection.FirstOrDefault(adcol => adcol.Title == vi.Rate.Title),
+                         PrevIndication = vi.PrevIndication.ToString(),
+                         CurIndication = vi.CurIndication.ToString(),
+                         Total = vi.Total.ToString(),
+                         SelectedDate = vi.DatePaid,
+                         Id = vi.Id
+                     }
+                ));
             }
         }
 

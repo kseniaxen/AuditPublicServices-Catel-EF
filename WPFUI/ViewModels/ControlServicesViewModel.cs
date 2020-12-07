@@ -26,14 +26,7 @@ namespace WPFUI.ViewModels
             _messageService = messageService;
 
             ServicesCollection = new ObservableCollection<Service>();
-            using (var db = new PSDBContext())
-            {
-                var servicesDb = db.Services.Where(login => login.User.Login == userViewModel.UserLogin);
-                foreach (var service in servicesDb)
-                {
-                    ServicesCollection.Add(new Service { Title = service.Title });
-                }
-            }
+            writeDatainList();
         }
         public ObservableCollection<Service> ServicesCollection
         {
@@ -71,11 +64,7 @@ namespace WPFUI.ViewModels
                                         User = db.Users.FirstOrDefault(login => login.Login == userViewModel.UserLogin)
                                     });
                                     db.SaveChanges();
-                                    ServicesCollection.Clear();
-                                    db.Services.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                                    {
-                                        ServicesCollection.Add(new Service { Title = a.Title });
-                                    });
+                                    writeDatainList();
                                 }
                             }
                             else
@@ -98,24 +87,23 @@ namespace WPFUI.ViewModels
                     string titlePrev = SelectedService.Title;
                     _uiVisualizerService.ShowDialogAsync(serviceViewModel, (sender, e) =>
                     {
-                        using (var db = new PSDBContext())
+                        if (e.Result ?? false)
                         {
-                            if (db.Services.FirstOrDefault(a => a.Title == serviceViewModel.ServiceTitle) == null || titlePrev == serviceViewModel.ServiceTitle)
+                            using (var db = new PSDBContext())
                             {
-                                var service = db.Services.FirstOrDefault(title => title.Title == titlePrev);
-                                service.Title = serviceViewModel.ServiceTitle;
-                                db.SaveChanges();
-                            }
-                            else
-                            {
-                                _messageService.ShowAsync("Такая услуга уже существует!", "Редактирование услуги");
-                            }
-                            ServicesCollection.Clear();
-                            db.Services.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                            {
-                                ServicesCollection.Add(new Service { Title = a.Title });
-                            });
-                        };
+                                if (db.Services.FirstOrDefault(a => a.Title == serviceViewModel.ServiceTitle) == null || titlePrev == serviceViewModel.ServiceTitle)
+                                {
+                                    var service = db.Services.FirstOrDefault(title => title.Title == titlePrev);
+                                    service.Title = serviceViewModel.ServiceTitle;
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    _messageService.ShowAsync("Такая услуга уже существует!", "Редактирование услуги");
+                                }
+                                writeDatainList();
+                            };
+                        }
                     });
 
                 }, () => SelectedService != null));
@@ -140,17 +128,25 @@ namespace WPFUI.ViewModels
                         var service = db.Services.FirstOrDefault(title => title.Title == SelectedService.Title);
                         db.Services.Remove(service);
                         db.SaveChanges();
-                        ServicesCollection.Clear();
-                        db.Services.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                        {
-                            ServicesCollection.Add(new Service { Title = a.Title });
-                        });
+                        writeDatainList();
                     };
                     ServicesCollection.Remove(SelectedService);
 
                     _pleaseWaitService.Hide();
                 },
                 () => SelectedService != null));
+            }
+        }
+
+        private void writeDatainList()
+        {
+            using (var db = new PSDBContext())
+            {
+                ServicesCollection.Clear();
+                db.Services.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
+                {
+                    ServicesCollection.Add(new Service { Title = a.Title });
+                });
             }
         }
     }

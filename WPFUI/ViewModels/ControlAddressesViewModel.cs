@@ -25,14 +25,7 @@ namespace WPFUI.ViewModels
             _pleaseWaitService = pleaseWaitService;
             _messageService = messageService;
             AddressesCollection = new ObservableCollection<Address>();
-            using (var db = new PSDBContext())
-            {
-                var addressesDb = db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin);
-                foreach(var address in addressesDb)
-                {
-                    AddressesCollection.Add(new Address { Title = address.Title });
-                }
-            }
+            writeDataInList();
         }
         public ObservableCollection<Address> AddressesCollection
         {
@@ -70,11 +63,7 @@ namespace WPFUI.ViewModels
                                         User = db.Users.FirstOrDefault(login => login.Login == userViewModel.UserLogin)
                                     });
                                     db.SaveChanges();
-                                    AddressesCollection.Clear();
-                                    db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                                    {
-                                        AddressesCollection.Add(new Address { Title = a.Title });
-                                    });
+                                    writeDataInList();
                                 }
                             }
                             else
@@ -96,25 +85,24 @@ namespace WPFUI.ViewModels
                     var addressViewModel = new AddressViewModel(SelectedAddress);
                     string titlePrev = SelectedAddress.Title;
                     _uiVisualizerService.ShowDialogAsync(addressViewModel, (sender, e) =>
-                    { 
-                        using (var db = new PSDBContext())
-                        { 
-                            if (db.Addresses.FirstOrDefault(a => a.Title == addressViewModel.AddressTitle) == null || titlePrev == addressViewModel.AddressTitle)
+                    {
+                        if (e.Result ?? false)
+                        {
+                            using (var db = new PSDBContext())
                             {
-                                var address = db.Addresses.FirstOrDefault(title => title.Title == titlePrev);
-                                address.Title = addressViewModel.AddressTitle;
-                                db.SaveChanges();
-                            }
-                            else
-                            {
-                                _messageService.ShowAsync("Такой адрес уже существует!", "Редактирование адреса");
-                            }
-                            AddressesCollection.Clear();
-                            db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                            {
-                                AddressesCollection.Add(new Address { Title = a.Title });
-                            });
-                        };
+                                if (db.Addresses.FirstOrDefault(a => a.Title == addressViewModel.AddressTitle) == null || titlePrev == addressViewModel.AddressTitle)
+                                {
+                                    var address = db.Addresses.FirstOrDefault(title => title.Title == titlePrev);
+                                    address.Title = addressViewModel.AddressTitle;
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    _messageService.ShowAsync("Такой адрес уже существует!", "Редактирование адреса");
+                                }
+                                writeDataInList();
+                            };
+                        }
                     });
                     
                 }, () => SelectedAddress != null));
@@ -139,17 +127,25 @@ namespace WPFUI.ViewModels
                         var address = db.Addresses.FirstOrDefault(title => title.Title == SelectedAddress.Title);
                         db.Addresses.Remove(address);
                         db.SaveChanges();
-                        AddressesCollection.Clear();
-                        db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
-                        {
-                            AddressesCollection.Add(new Address { Title = a.Title });
-                        });
+                        writeDataInList();
                     };
                     AddressesCollection.Remove(SelectedAddress);
 
                     _pleaseWaitService.Hide();
                 },
                 () => SelectedAddress != null));
+            }
+        }
+
+        private void writeDataInList()
+        {
+            using(var db = new PSDBContext())
+            {
+                AddressesCollection.Clear();
+                db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(a =>
+                {
+                    AddressesCollection.Add(new Address { Title = a.Title });
+                });
             }
         }
     }
