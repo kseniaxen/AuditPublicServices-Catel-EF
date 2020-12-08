@@ -36,12 +36,19 @@ namespace WPFUI.ViewModels
                     AddressesCollection = new ObservableCollection<Address>();
                     RatesCollection = new ObservableCollection<Rate>();
                     ServicesCollection = new ObservableCollection<Service>();
-                    writeDataInTable();
                     UserAddressesCollection = new ObservableCollection<Address>();
+                    writeDataInTable();
                     foreach (var item in AddressesCollection)
                     {
                         UserAddressesCollection.Add(item);
                     }
+
+                    if(UserAddressesCollection.Count>0)
+                    {
+                        SelectedAddress = UserAddressesCollection.First();
+                    }
+                    SelectedDate = DateTime.Now;
+                    writeDataInTable();
                 }
                 else
                 {
@@ -78,6 +85,17 @@ namespace WPFUI.ViewModels
             }
         }
         public static readonly PropertyData SelectedAddressProperty = RegisterProperty("SelectedAddress", typeof(Address));
+
+        public DateTime SelectedDate
+        {
+            get { return GetValue<DateTime>(SelectedDateProperty); }
+            set
+            {
+                SetValue(SelectedDateProperty, value);
+                writeDataWithDateTimeInTable();
+            }
+        }
+        public static readonly PropertyData SelectedDateProperty = RegisterProperty("SelectedDate", typeof(DateTime));
 
         private Command _controlAddresses;
         public Command ControlAddresses
@@ -315,6 +333,50 @@ namespace WPFUI.ViewModels
                 }
             }
         }
+        public void writeDataWithDateTimeInTable()
+        {
+            using (var db = new PSDBContext())
+            {
+                AddressesCollection.Clear();
+                db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
+                    AddressesCollection.Add(new Address
+                    {
+                        Title = ad.Title
+                    })
+                );
 
+                ServicesCollection.Clear();
+                db.Services.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
+                     ServicesCollection.Add(new Service
+                     {
+                         Title = ad.Title
+                     })
+                );
+
+                RatesCollection.Clear();
+                db.Rates.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
+                     RatesCollection.Add(new Rate
+                     {
+                         Title = ad.Title,
+                         MeasureTitle = ad.MeasureTitle,
+                         Price = ad.Price.ToString()
+                     })
+                );
+                VICollection.Clear();
+                db.VolumeIndications.Where(login => login.User.Login == userViewModel.UserLogin && login.DatePaid == SelectedDate).ToList().ForEach(vi =>
+                     VICollection.Add(new VolumeIndication
+                     {
+                         SelectedAddress = AddressesCollection.FirstOrDefault(adcol => adcol.Title == vi.Address.Title),
+                         SelectedService = ServicesCollection.FirstOrDefault(adcol => adcol.Title == vi.Service.Title),
+                         SelectedRate = RatesCollection.FirstOrDefault(adcol => adcol.Title == vi.Rate.Title),
+                         PrevIndication = vi.PrevIndication.ToString(),
+                         CurIndication = vi.CurIndication.ToString(),
+                         Total = vi.Total.ToString(),
+                         SelectedDate = vi.DatePaid,
+                         Id = vi.Id
+                     }
+                ));
+            }
+        }
     }
 }

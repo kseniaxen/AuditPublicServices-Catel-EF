@@ -145,6 +145,11 @@ namespace WPFUI.ViewModels
                     {
                         var rate = db.Rates.FirstOrDefault(title => title.Title == SelectedRate.Title);
                         db.Rates.Remove(rate);
+                        var vi = db.VolumeIndications.Where(viAd => viAd.Rate.Title == SelectedRate.Title);
+                        foreach (var item in vi)
+                        {
+                            db.VolumeIndications.Remove(item);
+                        }
                         db.SaveChanges();
                         writeDataInList();
                     };

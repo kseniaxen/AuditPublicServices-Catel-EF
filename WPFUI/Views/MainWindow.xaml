@@ -85,8 +85,9 @@
              HorizontalAlignment="Center"
              VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Адрес: "/>
-                <ComboBox  VerticalAlignment="Top" Style="{StaticResource ComboBoxFlatStyle}"
+                <TextBlock Text="Адрес: "
+                           VerticalAlignment="Center"/>
+                <ComboBox  VerticalAlignment="Center" Style="{StaticResource ComboBoxFlatStyle}"
                            ItemsSource="{Binding UserAddressesCollection}" 
                            SelectedItem="{Binding SelectedAddress}">
                     <ComboBox.ItemTemplate>
@@ -95,6 +96,9 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+                <DatePicker SelectedDateFormat="Short"
+                            VerticalAlignment="Center"
+                            SelectedDate="{Binding SelectedDate}"/>
             </StackPanel>
         </WrapPanel>
         <WrapPanel

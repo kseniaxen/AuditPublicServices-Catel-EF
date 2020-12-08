@@ -126,6 +126,11 @@ namespace WPFUI.ViewModels
                     {
                         var address = db.Addresses.FirstOrDefault(title => title.Title == SelectedAddress.Title);
                         db.Addresses.Remove(address);
+                        var vi = db.VolumeIndications.Where(viAd => viAd.Address.Title == SelectedAddress.Title);
+                        foreach (var item in vi)
+                        {
+                            db.VolumeIndications.Remove(item);
+                        }
                         db.SaveChanges();
                         writeDataInList();
                     };

@@ -127,6 +127,11 @@ namespace WPFUI.ViewModels
                     {
                         var service = db.Services.FirstOrDefault(title => title.Title == SelectedService.Title);
                         db.Services.Remove(service);
+                        var vi = db.VolumeIndications.Where(viAd => viAd.Service.Title == SelectedService.Title);
+                        foreach (var item in vi)
+                        {
+                            db.VolumeIndications.Remove(item);
+                        }
                         db.SaveChanges();
                         writeDatainList();
                     };
