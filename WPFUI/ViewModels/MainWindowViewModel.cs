@@ -37,6 +37,11 @@ namespace WPFUI.ViewModels
                     RatesCollection = new ObservableCollection<Rate>();
                     ServicesCollection = new ObservableCollection<Service>();
                     writeDataInTable();
+                    UserAddressesCollection = new ObservableCollection<Address>();
+                    foreach (var item in AddressesCollection)
+                    {
+                        UserAddressesCollection.Add(item);
+                    }
                 }
                 else
                 {
@@ -64,6 +69,16 @@ namespace WPFUI.ViewModels
         }
         public static readonly PropertyData SelectedVIProperty = RegisterProperty("SelectedVI", typeof(VolumeIndication));
 
+        public ObservableCollection<Address> UserAddressesCollection { get; set; }
+        public Address SelectedAddress
+        {
+            get { return GetValue<Address>(SelectedAddressProperty); }
+            set { SetValue(SelectedAddressProperty, value);
+                  writeDataInTable();
+            }
+        }
+        public static readonly PropertyData SelectedAddressProperty = RegisterProperty("SelectedAddress", typeof(Address));
+
         private Command _controlAddresses;
         public Command ControlAddresses
         {
@@ -77,6 +92,11 @@ namespace WPFUI.ViewModels
                         if (e.Result ?? false)
                         {
                             writeDataInTable();
+                            UserAddressesCollection.Clear();
+                            foreach (var item in AddressesCollection)
+                            {
+                                UserAddressesCollection.Add(item);
+                            }
                         }
                     });
                 }));
@@ -231,7 +251,6 @@ namespace WPFUI.ViewModels
                 },()=> SelectedVI != null));
             }
         }
-
         public void writeDataInTable()
         {
             using (var db = new PSDBContext())
@@ -240,7 +259,7 @@ namespace WPFUI.ViewModels
                 db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
                     AddressesCollection.Add(new Address
                     {
-                        Title = ad.Title
+                            Title = ad.Title
                     })
                 );
 
@@ -261,21 +280,39 @@ namespace WPFUI.ViewModels
                          Price = ad.Price.ToString()
                      })
                 );
-
                 VICollection.Clear();
-                db.VolumeIndications.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(vi =>
-                     VICollection.Add(new VolumeIndication
-                     {
-                         SelectedAddress = AddressesCollection.FirstOrDefault(adcol => adcol.Title == vi.Address.Title),
-                         SelectedService = ServicesCollection.FirstOrDefault(adcol => adcol.Title == vi.Service.Title),
-                         SelectedRate = RatesCollection.FirstOrDefault(adcol => adcol.Title == vi.Rate.Title),
-                         PrevIndication = vi.PrevIndication.ToString(),
-                         CurIndication = vi.CurIndication.ToString(),
-                         Total = vi.Total.ToString(),
-                         SelectedDate = vi.DatePaid,
-                         Id = vi.Id
-                     }
-                ));
+                if (SelectedAddress == null)
+                {
+                    db.VolumeIndications.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(vi =>
+                         VICollection.Add(new VolumeIndication
+                         {
+                             SelectedAddress = AddressesCollection.FirstOrDefault(adcol => adcol.Title == vi.Address.Title),
+                             SelectedService = ServicesCollection.FirstOrDefault(adcol => adcol.Title == vi.Service.Title),
+                             SelectedRate = RatesCollection.FirstOrDefault(adcol => adcol.Title == vi.Rate.Title),
+                             PrevIndication = vi.PrevIndication.ToString(),
+                             CurIndication = vi.CurIndication.ToString(),
+                             Total = vi.Total.ToString(),
+                             SelectedDate = vi.DatePaid,
+                             Id = vi.Id
+                         }
+                    ));
+                }
+                else
+                {
+                    db.VolumeIndications.Where(login => login.User.Login == userViewModel.UserLogin && login.Address.Title == SelectedAddress.Title).ToList().ForEach(vi =>
+                         VICollection.Add(new VolumeIndication
+                         {
+                             SelectedAddress = AddressesCollection.FirstOrDefault(adcol => adcol.Title == vi.Address.Title),
+                             SelectedService = ServicesCollection.FirstOrDefault(adcol => adcol.Title == vi.Service.Title),
+                             SelectedRate = RatesCollection.FirstOrDefault(adcol => adcol.Title == vi.Rate.Title),
+                             PrevIndication = vi.PrevIndication.ToString(),
+                             CurIndication = vi.CurIndication.ToString(),
+                             Total = vi.Total.ToString(),
+                             SelectedDate = vi.DatePaid,
+                             Id = vi.Id
+                         }
+                    ));
+                }
             }
         }
 
