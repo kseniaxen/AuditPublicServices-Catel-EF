@@ -15,6 +15,7 @@ namespace WPFUI.ViewModels
         private readonly IPleaseWaitService _pleaseWaitService;
         private readonly IMessageService _messageService;
         public UserViewModel userViewModel;
+        private RegLogViewModel regLogViewModel;
 
         public string UserLogin { get; set; }
         public MainWindowViewModel(IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService, IMessageService messageService)
@@ -22,8 +23,7 @@ namespace WPFUI.ViewModels
             _uiVisualizerService = uiVisualizerService;
             _pleaseWaitService = pleaseWaitService;
             _messageService = messageService;
-
-            RegLogViewModel regLogViewModel = new RegLogViewModel(_uiVisualizerService, _pleaseWaitService, _messageService);
+            regLogViewModel = new RegLogViewModel(_uiVisualizerService, _pleaseWaitService, _messageService);
             _uiVisualizerService.ShowDialogAsync(regLogViewModel, (sender, e) =>
             {
                 if (regLogViewModel.isUserViewModelExist)
@@ -43,7 +43,7 @@ namespace WPFUI.ViewModels
                         UserAddressesCollection.Add(item);
                     }
 
-                    if(UserAddressesCollection.Count>0)
+                    if (UserAddressesCollection.Count > 0)
                     {
                         SelectedAddress = UserAddressesCollection.First();
                     }
@@ -80,9 +80,12 @@ namespace WPFUI.ViewModels
         public Address SelectedAddress
         {
             get { return GetValue<Address>(SelectedAddressProperty); }
-            set { SetValue(SelectedAddressProperty, value);
-                  writeDataInTable();
+            set
+            {
+                SetValue(SelectedAddressProperty, value);
+                writeDataInTable();
             }
+
         }
         public static readonly PropertyData SelectedAddressProperty = RegisterProperty("SelectedAddress", typeof(Address));
 
@@ -233,7 +236,7 @@ namespace WPFUI.ViewModels
                                     viCurr.CurIndication = Int32.Parse(VIViewModel.VICurIndication);
                                     viCurr.Total = Convert.ToDecimal((Int32.Parse(VIViewModel.VICurIndication) - Int32.Parse(VIViewModel.VIPrevIndication)) * Convert.ToDecimal(VIViewModel.VISelectedRate.Price));
                                     viCurr.DatePaid = VIViewModel.VISelectedDate;
-                                    db.SaveChanges();  
+                                    db.SaveChanges();
                                 }
                             }
                         }
@@ -267,9 +270,55 @@ namespace WPFUI.ViewModels
                     VICollection.Remove(SelectedVI);
 
                     _pleaseWaitService.Hide();
-                },()=> SelectedVI != null));
+                }, () => SelectedVI != null));
             }
         }
+
+        private Command _regLogCommand;
+        public Command RegLogCommand
+        {
+            get
+            {
+                return _regLogCommand ?? (_regLogCommand = new Command(async () =>
+                {
+                    var tempUserViewModel = new UserViewModel();
+                    tempUserViewModel = userViewModel;
+                    regLogViewModel = new RegLogViewModel(_uiVisualizerService, _pleaseWaitService, _messageService);
+                    await _uiVisualizerService.ShowDialogAsync(regLogViewModel, (sender, e) =>
+                     {
+                         if (regLogViewModel.isUserViewModelExist)
+                         {
+                             this.userViewModel = regLogViewModel.userViewModel;
+                         }
+                         else
+                         {
+                             this.userViewModel = tempUserViewModel;
+                         }
+                         Console.WriteLine(userViewModel.UserLogin);
+                         Console.WriteLine(userViewModel.UserPassword);
+                         UserLogin = userViewModel.UserLogin;
+                         VICollection = new ObservableCollection<VolumeIndication>();
+                         AddressesCollection = new ObservableCollection<Address>();
+                         RatesCollection = new ObservableCollection<Rate>();
+                         ServicesCollection = new ObservableCollection<Service>();
+                         UserAddressesCollection = new ObservableCollection<Address>();
+                         writeDataInTable();
+                         foreach (var item in AddressesCollection)
+                         {
+                             UserAddressesCollection.Add(item);
+                         }
+
+                         if (UserAddressesCollection.Count > 0)
+                         {
+                             SelectedAddress = UserAddressesCollection.First();
+                         }
+                         SelectedDate = DateTime.Now;
+                         writeDataInTable();
+                     });
+                }));
+            }
+        }
+
         public void writeDataInTable()
         {
             using (var db = new PSDBContext())

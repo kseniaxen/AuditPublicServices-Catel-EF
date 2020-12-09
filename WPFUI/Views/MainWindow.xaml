@@ -72,7 +72,7 @@
                     Height="22"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Command="{Binding RemoveCommand}"
+                    Command="{Binding RegLogCommand}"
                     Focusable="False">
                 <Image Source="/WPFUI;component/Resources/Icons/logIn.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
