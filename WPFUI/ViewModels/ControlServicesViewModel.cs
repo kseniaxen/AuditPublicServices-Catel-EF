@@ -54,9 +54,9 @@ namespace WPFUI.ViewModels
                     {
                         if (e.Result ?? false)
                         {
-                            if (ServicesCollection.FirstOrDefault(adTitle => adTitle.Title == serviceViewModel.ServiceTitle) == null)
+                            using (var db = new PSDBContext())
                             {
-                                using (var db = new PSDBContext())
+                                if (db.Services.FirstOrDefault(a => a.Title == serviceViewModel.ServiceTitle && a.User.Login == userViewModel.UserLogin) == null)
                                 {
                                     db.Services.Add(new PublicServicesDomain.Models.Service
                                     {
@@ -66,10 +66,10 @@ namespace WPFUI.ViewModels
                                     db.SaveChanges();
                                     writeDatainList();
                                 }
-                            }
-                            else
-                            {
-                                _messageService.ShowAsync("Такая услуга уже существует!", "Добавление услуги");
+                                else
+                                {
+                                    _messageService.ShowAsync("Такая услуга уже существует!", "Добавление услуги");
+                                }
                             }
                         }
                     });
@@ -91,9 +91,9 @@ namespace WPFUI.ViewModels
                         {
                             using (var db = new PSDBContext())
                             {
-                                if (db.Services.FirstOrDefault(a => a.Title == serviceViewModel.ServiceTitle) == null || titlePrev == serviceViewModel.ServiceTitle)
+                                if (db.Services.FirstOrDefault(a => a.Title == serviceViewModel.ServiceTitle && a.User.Login == userViewModel.UserLogin) == null || titlePrev == serviceViewModel.ServiceTitle)
                                 {
-                                    var service = db.Services.FirstOrDefault(title => title.Title == titlePrev);
+                                    var service = db.Services.FirstOrDefault(title => title.Title == titlePrev && title.User.Login == userViewModel.UserLogin);
                                     service.Title = serviceViewModel.ServiceTitle;
                                     db.SaveChanges();
                                 }
@@ -125,9 +125,9 @@ namespace WPFUI.ViewModels
                     _pleaseWaitService.Show("Удаление услуги...");
                     using (var db = new PSDBContext())
                     {
-                        var service = db.Services.FirstOrDefault(title => title.Title == SelectedService.Title);
+                        var service = db.Services.FirstOrDefault(title => title.Title == SelectedService.Title && title.User.Login == userViewModel.UserLogin);
                         db.Services.Remove(service);
-                        var vi = db.VolumeIndications.Where(viAd => viAd.Service.Title == SelectedService.Title);
+                        var vi = db.VolumeIndications.Where(viAd => viAd.Service.Title == SelectedService.Title && viAd.User.Login == userViewModel.UserLogin);
                         foreach (var item in vi)
                         {
                             db.VolumeIndications.Remove(item);

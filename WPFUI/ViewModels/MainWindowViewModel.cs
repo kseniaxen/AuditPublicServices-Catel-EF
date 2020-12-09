@@ -182,15 +182,16 @@ namespace WPFUI.ViewModels
                                 {
                                     db.VolumeIndications.Add(new PublicServicesDomain.Models.VolumeIndication
                                     {
-                                        Address = db.Addresses.FirstOrDefault(ad => ad.Title == VIViewModel.VISelectedAddress.Title),
-                                        Rate = db.Rates.FirstOrDefault(rate => rate.Title == VIViewModel.VISelectedRate.Title),
-                                        Service = db.Services.FirstOrDefault(ser => ser.Title == VIViewModel.VISelectedService.Title),
+                                        Address = db.Addresses.FirstOrDefault(ad => ad.Title == VIViewModel.VISelectedAddress.Title && ad.User.Login == userViewModel.UserLogin),
+                                        Rate = db.Rates.FirstOrDefault(rate => rate.Title == VIViewModel.VISelectedRate.Title && rate.User.Login == userViewModel.UserLogin),
+                                        Service = db.Services.FirstOrDefault(ser => ser.Title == VIViewModel.VISelectedService.Title && ser.User.Login == userViewModel.UserLogin),
                                         PrevIndication = Int32.Parse(VIViewModel.VIPrevIndication),
                                         CurIndication = Int32.Parse(VIViewModel.VICurIndication),
                                         Total = Convert.ToDecimal((Int32.Parse(VIViewModel.VICurIndication) - Int32.Parse(VIViewModel.VIPrevIndication)) * Convert.ToDecimal(VIViewModel.VISelectedRate.Price)),
                                         DatePaid = VIViewModel.VISelectedDate,
                                         User = db.Users.FirstOrDefault(login => login.Login == userViewModel.UserLogin)
                                     });
+                                    Console.WriteLine(db.Rates.FirstOrDefault(rate => rate.Title == VIViewModel.VISelectedRate.Title && rate.User.Login == userViewModel.UserLogin).Title);
                                     db.SaveChanges();
                                     writeDataInTable();
                                 }
@@ -225,9 +226,9 @@ namespace WPFUI.ViewModels
                                 using (var db = new PSDBContext())
                                 {
                                     var viCurr = db.VolumeIndications.FirstOrDefault(id => id.Id == viPrevId);
-                                    viCurr.Address = db.Addresses.FirstOrDefault(ad => ad.Title == VIViewModel.VISelectedAddress.Title);
-                                    viCurr.Service = db.Services.FirstOrDefault(ser => ser.Title == VIViewModel.VISelectedService.Title);
-                                    viCurr.Rate = db.Rates.FirstOrDefault(rate => rate.Title == VIViewModel.VISelectedRate.Title);
+                                    viCurr.Address = db.Addresses.FirstOrDefault(ad => ad.Title == VIViewModel.VISelectedAddress.Title && ad.User.Login == userViewModel.UserLogin);
+                                    viCurr.Service = db.Services.FirstOrDefault(ser => ser.Title == VIViewModel.VISelectedService.Title && ser.User.Login == userViewModel.UserLogin);
+                                    viCurr.Rate = db.Rates.FirstOrDefault(rate => rate.Title == VIViewModel.VISelectedRate.Title && rate.User.Login == userViewModel.UserLogin);
                                     viCurr.PrevIndication = Int32.Parse(VIViewModel.VIPrevIndication);
                                     viCurr.CurIndication = Int32.Parse(VIViewModel.VICurIndication);
                                     viCurr.Total = Convert.ToDecimal((Int32.Parse(VIViewModel.VICurIndication) - Int32.Parse(VIViewModel.VIPrevIndication)) * Convert.ToDecimal(VIViewModel.VISelectedRate.Price));
@@ -277,7 +278,7 @@ namespace WPFUI.ViewModels
                 db.Addresses.Where(login => login.User.Login == userViewModel.UserLogin).ToList().ForEach(ad =>
                     AddressesCollection.Add(new Address
                     {
-                            Title = ad.Title
+                        Title = ad.Title
                     })
                 );
 

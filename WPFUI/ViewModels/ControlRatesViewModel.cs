@@ -54,11 +54,11 @@ namespace WPFUI.ViewModels
                     {
                         if (e.Result ?? false)
                         {
-                            if (RatesCollection.FirstOrDefault(rateTitle => rateTitle.Title == rateViewModel.RateTitle) == null)
+                            using (var db = new PSDBContext())
                             {
-                                if (isValidNumber(rateViewModel.RatePrice))
+                                if (db.Rates.FirstOrDefault(a => a.Title == rateViewModel.RateTitle && a.User.Login == userViewModel.UserLogin) == null)
                                 {
-                                    using (var db = new PSDBContext())
+                                    if (isValidNumber(rateViewModel.RatePrice))
                                     {
                                         db.Rates.Add(new PublicServicesDomain.Models.Rate
                                         {
@@ -70,15 +70,15 @@ namespace WPFUI.ViewModels
                                         db.SaveChanges();
                                         writeDataInList();
                                     }
+                                    else
+                                    {
+                                        _messageService.ShowAsync("Цена не должна быть отрицательной или равна 0!", "Добавление тарифа");
+                                    }
                                 }
                                 else
                                 {
-                                    _messageService.ShowAsync("Цена не должна быть отрицательной или равна 0!", "Добавление тарифа");
+                                    _messageService.ShowAsync("Такой тариф уже существует!", "Добавление тарифа");
                                 }
-                            }
-                            else
-                            {
-                                _messageService.ShowAsync("Такой тариф уже существует!", "Добавление тарифа");
                             }
                         }
                     });
@@ -100,11 +100,11 @@ namespace WPFUI.ViewModels
                         {
                             using (var db = new PSDBContext())
                             {
-                                if (db.Rates.FirstOrDefault(a => a.Title == rateViewModel.RateTitle) == null || titlePrev == rateViewModel.RateTitle)
+                                if (db.Rates.FirstOrDefault(a => a.Title == rateViewModel.RateTitle && a.User.Login == userViewModel.UserLogin) == null || titlePrev == rateViewModel.RateTitle)
                                 {
                                     if (isValidNumber(rateViewModel.RatePrice))
                                     {
-                                        var rate = db.Rates.FirstOrDefault(title => title.Title == titlePrev);
+                                        var rate = db.Rates.FirstOrDefault(title => title.Title == titlePrev && title.User.Login == userViewModel.UserLogin);
                                         rate.Title = rateViewModel.RateTitle;
                                         rate.MeasureTitle = rateViewModel.RateMeasureTitle;
                                         rate.Price = parsePrice(rateViewModel.RatePrice);
@@ -143,9 +143,9 @@ namespace WPFUI.ViewModels
                     _pleaseWaitService.Show("Удаление тарифа...");
                     using (var db = new PSDBContext())
                     {
-                        var rate = db.Rates.FirstOrDefault(title => title.Title == SelectedRate.Title);
+                        var rate = db.Rates.FirstOrDefault(title => title.Title == SelectedRate.Title && title.User.Login == userViewModel.UserLogin);
                         db.Rates.Remove(rate);
-                        var vi = db.VolumeIndications.Where(viAd => viAd.Rate.Title == SelectedRate.Title);
+                        var vi = db.VolumeIndications.Where(viAd => viAd.Rate.Title == SelectedRate.Title && viAd.User.Login == userViewModel.UserLogin);
                         foreach (var item in vi)
                         {
                             db.VolumeIndications.Remove(item);

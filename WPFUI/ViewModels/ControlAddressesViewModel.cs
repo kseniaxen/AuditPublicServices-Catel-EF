@@ -51,11 +51,11 @@ namespace WPFUI.ViewModels
                     var addressViewModel = new AddressViewModel();
                     _uiVisualizerService.ShowDialogAsync(addressViewModel, (sender, e) =>
                     {
-                        if(e.Result ?? false)
+                        if (e.Result ?? false)
                         {
-                            if (AddressesCollection.FirstOrDefault(adTitle => adTitle.Title == addressViewModel.AddressTitle) == null)
+                            using (var db = new PSDBContext())
                             {
-                                using (var db = new PSDBContext())
+                                if (db.Addresses.FirstOrDefault(a => a.Title == addressViewModel.AddressTitle && a.User.Login == userViewModel.UserLogin) == null)
                                 {
                                     db.Addresses.Add(new PublicServicesDomain.Models.Address
                                     {
@@ -65,10 +65,10 @@ namespace WPFUI.ViewModels
                                     db.SaveChanges();
                                     writeDataInList();
                                 }
-                            }
-                            else
-                            {
-                                _messageService.ShowAsync("Такой адрес уже существует!", "Добавление адреса");
+                                else
+                                {
+                                    _messageService.ShowAsync("Такой адрес уже существует!", "Добавление адреса");
+                                }
                             }
                         }
                     });
@@ -90,9 +90,9 @@ namespace WPFUI.ViewModels
                         {
                             using (var db = new PSDBContext())
                             {
-                                if (db.Addresses.FirstOrDefault(a => a.Title == addressViewModel.AddressTitle) == null || titlePrev == addressViewModel.AddressTitle)
+                                if (db.Addresses.FirstOrDefault(a => a.Title == addressViewModel.AddressTitle && a.User.Login == userViewModel.UserLogin) == null || titlePrev == addressViewModel.AddressTitle)
                                 {
-                                    var address = db.Addresses.FirstOrDefault(title => title.Title == titlePrev);
+                                    var address = db.Addresses.FirstOrDefault(title => title.Title == titlePrev && title.User.Login == userViewModel.UserLogin);
                                     address.Title = addressViewModel.AddressTitle;
                                     db.SaveChanges();
                                 }
@@ -124,9 +124,9 @@ namespace WPFUI.ViewModels
                     _pleaseWaitService.Show("Удаление адреса...");
                     using (var db = new PSDBContext())
                     {
-                        var address = db.Addresses.FirstOrDefault(title => title.Title == SelectedAddress.Title);
+                        var address = db.Addresses.FirstOrDefault(title => title.Title == SelectedAddress.Title && title.User.Login == userViewModel.UserLogin);
                         db.Addresses.Remove(address);
-                        var vi = db.VolumeIndications.Where(viAd => viAd.Address.Title == SelectedAddress.Title);
+                        var vi = db.VolumeIndications.Where(viAd => viAd.Address.Title == SelectedAddress.Title && viAd.User.Login == userViewModel.UserLogin);
                         foreach (var item in vi)
                         {
                             db.VolumeIndications.Remove(item);
