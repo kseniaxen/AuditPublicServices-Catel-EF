@@ -82,7 +82,8 @@ namespace WPFUI.ViewModels
         public DateTime VISelectedDate
         {
             get { return GetValue<DateTime>(SelectedDateProperty); }
-            set { SetValue(SelectedDateProperty, value); }
+            set {
+                SetValue(SelectedDateProperty, value); }
         }
         public static readonly PropertyData SelectedDateProperty = RegisterProperty("VISelectedDate", typeof(DateTime));
 
@@ -92,6 +93,7 @@ namespace WPFUI.ViewModels
             VIAddressesCollection = addressCol;
             VIServicesCollection = serviceCol;
             VIRatesCollection = rateCol;
+            if(volumeIndication == null) VISelectedDate = DateTime.Now;
         }
     }
 }

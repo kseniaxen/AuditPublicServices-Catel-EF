@@ -82,11 +82,6 @@ namespace WPFUI.Models
             {
                 validationResults.Add(FieldValidationResult.CreateError(CurIndicationProperty, "Неверный формат ввода текущ. показания!"));
             }
-
-            if (DateTime.MinValue == SelectedDate)
-            {
-                validationResults.Add(FieldValidationResult.CreateError(SelectedDateProperty, "Не указана дата!"));
-            }
         }
 
     }
