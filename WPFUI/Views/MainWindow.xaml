@@ -53,7 +53,10 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding AddCommand}"
-                    Focusable="False">
+                    Focusable="False"
+                    ToolTipService.InitialShowDelay="2000" 
+                    ToolTipService.ShowDuration="2000" 
+                    ToolTip="Добавить запись">
                 <Image Source="/WPFUI;component/Resources/Icons/add.ico" Style="{StaticResource ImageEnabled}"/>
             </Button>
             <Button Width="75"
@@ -61,7 +64,10 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding EditCommand}"
-                    Focusable="False">
+                    Focusable="False"
+                    ToolTipService.InitialShowDelay="2000" 
+                    ToolTipService.ShowDuration="2000" 
+                    ToolTip="Изменить запись">
                 <Image Source="/WPFUI;component/Resources/Icons/edit.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
@@ -69,7 +75,10 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding RemoveCommand}"
-                    Focusable="False">
+                    Focusable="False"
+                    ToolTipService.InitialShowDelay="2000" 
+                    ToolTipService.ShowDuration="2000" 
+                    ToolTip="Удалить запись">
                 <Image Source="/WPFUI;component/Resources/Icons/remove.ico" Style="{StaticResource ImageEnabled}"/>
             </Button>
             <Button Width="75"
@@ -77,7 +86,10 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding RegLogCommand}"
-                    Focusable="False">
+                    Focusable="False"
+                    ToolTipService.InitialShowDelay="2000" 
+                    ToolTipService.ShowDuration="2000" 
+                    ToolTip="Выйти с профиля">
                 <Image Source="/WPFUI;component/Resources/Icons/logIn.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
         </ToolBar>

@@ -34,7 +34,10 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Command="{Binding AddCommand}"
-                    Focusable="False">
+                    Focusable="False"
+                    ToolTipService.InitialShowDelay="2000" 
+                    ToolTipService.ShowDuration="2000" 
+                    ToolTip="Добавить услугу">
                 <Image Source="/WPFUI;component/Resources/Icons/add.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
@@ -42,7 +45,10 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Command="{Binding EditCommand}"
-                    Focusable="False">
+                    Focusable="False"
+                    ToolTipService.InitialShowDelay="2000" 
+                    ToolTipService.ShowDuration="2000" 
+                    ToolTip="Изменить услугу">
                 <Image Source="/WPFUI;component/Resources/Icons/edit.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
@@ -50,7 +56,10 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Command="{Binding RemoveCommand}"
-                    Focusable="False">
+                    Focusable="False"
+                    ToolTipService.InitialShowDelay="2000" 
+                    ToolTipService.ShowDuration="2000" 
+                    ToolTip="Удалить услугу">
                 <Image Source="/WPFUI;component/Resources/Icons/remove.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
         </ToolBar>
