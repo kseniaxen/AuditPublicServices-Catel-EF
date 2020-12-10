@@ -5,6 +5,7 @@
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
+    using Catel.Services;
     using Catel.Windows;
     using PublicServicesDomain;
 
@@ -14,6 +15,7 @@
     public partial class App : Application
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         protected override void OnStartup(StartupEventArgs e)
         {
 #if DEBUG

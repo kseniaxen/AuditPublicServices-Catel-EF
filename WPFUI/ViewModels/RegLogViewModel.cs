@@ -33,7 +33,6 @@ namespace WPFUI.ViewModels
             {
                 db.Users.ToList().ForEach(
                     a => {
-                        Console.WriteLine("Id " + a.Login + " Password " + a.Password);
                         users.Add(a);
                     }
                 );

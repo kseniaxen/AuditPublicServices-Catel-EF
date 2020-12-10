@@ -4,6 +4,8 @@
                   xmlns:catel="http://schemas.catelproject.com"
                   Width="500"
                   Height="400"
+                  MinWidth="500"
+                  MinHeight="400"
                   ResizeMode="CanResize"
                   SizeToContent="Manual"
                   WindowStartupLocation="CenterScreen"
@@ -21,13 +23,18 @@
 
     </catel:DataWindow.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="121*"/>
+            <ColumnDefinition Width="379*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="43" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <ToolBar Grid.Row="0">
+        <ToolBar Grid.Row="0"
+                 Background="LightGreen" Grid.ColumnSpan="2">
             <Button Width="75"
-                    Height="22"
+                    Height="30"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Command="{Binding AddCommand}"
@@ -35,7 +42,7 @@
                 <Image Source="/WPFUI;component/Resources/Icons/add.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
-                    Height="22"
+                    Height="30"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Command="{Binding EditCommand}"
@@ -43,7 +50,7 @@
                 <Image Source="/WPFUI;component/Resources/Icons/edit.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
-                    Height="22"
+                    Height="30"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Command="{Binding RemoveCommand}"
@@ -52,9 +59,9 @@
             </Button>
         </ToolBar>
         <ListView Grid.Row="1"
-                  Margin="10"
+                  Margin="10,10,10,10"
                   ItemsSource="{Binding RatesCollection}"
-                  SelectedItem="{Binding SelectedRate}">
+                  SelectedItem="{Binding SelectedRate}" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="200"

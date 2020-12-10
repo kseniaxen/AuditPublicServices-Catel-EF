@@ -43,7 +43,7 @@ namespace WPFUI.ViewModels
             set { SetValue(PriceProperty, value); }
         }
         public static readonly PropertyData PriceProperty = RegisterProperty("RatePrice", typeof(string));
-        
+        public override string Title { get { return "Rates Management"; } }
         public RateViewModel(Rate rate = null)
         {
             RateObject = rate ?? new Rate();

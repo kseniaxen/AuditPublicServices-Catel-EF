@@ -22,6 +22,7 @@ namespace WPFUI.ViewModels
             set { SetValue(TitleProperty, value); }
         }
         public static readonly PropertyData TitleProperty = RegisterProperty("ServiceTitle", typeof(string));
+        public override string Title { get { return "Services Management"; } }
         public ServiceViewModel(Service service = null)
         {
             ServiceObject = service ?? new Service();

@@ -7,6 +7,8 @@
                   xmlns:viewModels="clr-namespace:WPFUI.ViewModels"
                   Width="450"
                   Height="200"
+                  MinWidth="450"
+                  MinHeight="200"
                   ResizeMode="CanResize"
                   SizeToContent="Manual"
                   d:DataContext="{d:DesignInstance viewModels:UserViewModel,  IsDesignTimeCreatable=True}"
@@ -25,7 +27,7 @@
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Width="46"
+        <Label FontSize="15"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                Content="Логин:" />
@@ -38,6 +40,7 @@
                  TextWrapping="Wrap" />
         <Label Grid.Row="1"
                Grid.Column="0"
+               FontSize="15"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                Content="Пароль:"/>

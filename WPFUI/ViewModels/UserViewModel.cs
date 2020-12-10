@@ -34,7 +34,7 @@ namespace WPFUI.ViewModels
             set { SetValue(PasswordProperty, value); }
         }
         public static readonly PropertyData PasswordProperty = RegisterProperty("UserPassword", typeof(string));
-
+        public override string Title { get { return "Audit Public Services"; } }
         public UserViewModel(User user = null)
         {
             UserObject = user ?? new User();

@@ -25,6 +25,7 @@ namespace WPFUI.ViewModels
             set { SetValue(TitleProperty, value); }
         }
         public static readonly PropertyData TitleProperty = RegisterProperty("AddressTitle", typeof(string));
+        public override string Title { get { return "Address Management"; } }
         public AddressViewModel(Address address = null)
         {
             AddressObject = address ?? new Address();

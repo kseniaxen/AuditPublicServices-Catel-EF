@@ -17,6 +17,7 @@ namespace WPFUI.ViewModels
         private readonly IPleaseWaitService _pleaseWaitService;
         private readonly IMessageService _messageService;
         public UserViewModel userViewModel;
+        public override string Title { get { return "Rates Management"; } }
 
         public ControlRatesViewModel(IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService, IMessageService messageService, UserViewModel userViewModel)
         {

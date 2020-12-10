@@ -16,7 +16,7 @@ namespace WPFUI.ViewModels
         private readonly IMessageService _messageService;
         public UserViewModel userViewModel;
         private RegLogViewModel regLogViewModel;
-
+        public override string Title { get { return "Audit Public Services"; } }
         public string UserLogin { get; set; }
         public MainWindowViewModel(IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService, IMessageService messageService)
         {
@@ -29,8 +29,6 @@ namespace WPFUI.ViewModels
                 if (regLogViewModel.isUserViewModelExist)
                 {
                     this.userViewModel = regLogViewModel.userViewModel;
-                    Console.WriteLine(userViewModel.UserLogin);
-                    Console.WriteLine(userViewModel.UserPassword);
                     UserLogin = userViewModel.UserLogin;
                     VICollection = new ObservableCollection<VolumeIndication>();
                     AddressesCollection = new ObservableCollection<Address>();
@@ -110,14 +108,15 @@ namespace WPFUI.ViewModels
                     var controlAddressesViewModel = new ControlAddressesViewModel(_uiVisualizerService, _pleaseWaitService, _messageService, userViewModel);
                     _uiVisualizerService.ShowDialogAsync(controlAddressesViewModel, (sender, e) =>
                     {
-                        if (e.Result ?? false)
+                        writeDataInTable();
+                        UserAddressesCollection.Clear();
+                        foreach (var item in AddressesCollection)
                         {
-                            writeDataInTable();
-                            UserAddressesCollection.Clear();
-                            foreach (var item in AddressesCollection)
-                            {
-                                UserAddressesCollection.Add(item);
-                            }
+                            UserAddressesCollection.Add(item);
+                        }
+                        if (UserAddressesCollection.Count > 0)
+                        {
+                            SelectedAddress = UserAddressesCollection.First();
                         }
                     });
                 }));
@@ -134,10 +133,7 @@ namespace WPFUI.ViewModels
                     var controlRatesViewModel = new ControlRatesViewModel(_uiVisualizerService, _pleaseWaitService, _messageService, userViewModel);
                     _uiVisualizerService.ShowDialogAsync(controlRatesViewModel, (sender, e) =>
                     {
-                        using (var db = new PSDBContext())
-                        {
-                            writeDataInTable();
-                        }
+                        writeDataInTable();
                     });
 
                 }));
@@ -154,10 +150,7 @@ namespace WPFUI.ViewModels
                     var controlServicesViewModel = new ControlServicesViewModel(_uiVisualizerService, _pleaseWaitService, _messageService, userViewModel);
                     _uiVisualizerService.ShowDialogAsync(controlServicesViewModel, (sender, e) =>
                     {
-                        using (var db = new PSDBContext())
-                        {
-                            writeDataInTable();
-                        }
+                        writeDataInTable();
                     });
 
                 }));

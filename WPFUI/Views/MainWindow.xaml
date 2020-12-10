@@ -4,6 +4,8 @@
                   xmlns:catel="http://schemas.catelproject.com"
                   Width="700"
                   Height="500"
+                  MinWidth="700"
+                  MinHeight="500"
                   ResizeMode="CanResize"
                   SizeToContent="Manual"
                   WindowStartupLocation="CenterScreen"
@@ -35,25 +37,27 @@
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center">
             <TextBlock  HorizontalAlignment="Center"
-                Text="Пользователь"/>
+                Text="Пользователь"
+                        FontSize="14"/>
             <Label HorizontalAlignment="Center" 
                    FontWeight="Bold" 
-                   FontSize="14" 
+                   FontSize="16" 
                    Content="{Binding UserLogin}"/>
         </StackPanel>
         <ToolBar  Grid.Row="0"
-                  Grid.Column="1">
+                  Grid.Column="1"
+                  Background="LightGreen">
             <Label Margin="20,0" Content="{Binding CurrDate}" FontSize="16"/>
             <Button Width="75"
-                    Height="22"
+                    Height="30"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding AddCommand}"
                     Focusable="False">
-                <Image Source="/WPFUI;component/Resources/Icons/add.ico" Style="{StaticResource ImageEnabled}" />
+                <Image Source="/WPFUI;component/Resources/Icons/add.ico" Style="{StaticResource ImageEnabled}"/>
             </Button>
             <Button Width="75"
-                    Height="22"
+                    Height="30"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding EditCommand}"
@@ -61,15 +65,15 @@
                 <Image Source="/WPFUI;component/Resources/Icons/edit.ico" Style="{StaticResource ImageEnabled}" />
             </Button>
             <Button Width="75"
-                    Height="22"
+                    Height="30"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding RemoveCommand}"
                     Focusable="False">
-                <Image Source="/WPFUI;component/Resources/Icons/remove.ico" Style="{StaticResource ImageEnabled}" />
+                <Image Source="/WPFUI;component/Resources/Icons/remove.ico" Style="{StaticResource ImageEnabled}"/>
             </Button>
             <Button Width="75"
-                    Height="22"
+                    Height="30"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Command="{Binding RegLogCommand}"
@@ -86,7 +90,8 @@
              VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Адрес: "
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center"
+                           FontSize="14"/>
                 <ComboBox  VerticalAlignment="Center" Style="{StaticResource ComboBoxFlatStyle}"
                            ItemsSource="{Binding UserAddressesCollection}" 
                            SelectedItem="{Binding SelectedAddress}">
@@ -133,12 +138,13 @@
         <ListView Grid.Row="3"
                   Grid.Column="1"
                   Margin="10"
+                  FontSize="13"
                   ItemsSource="{Binding VICollection}"
                   SelectedItem="{Binding SelectedVI}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding SelectedAddress.Title}"
-                                    Header="Адрес" />
+                                    Header="Адрес"/>
                     <GridViewColumn DisplayMemberBinding="{Binding SelectedRate.Title}"
                                     Header="Тариф" />
                     <GridViewColumn DisplayMemberBinding="{Binding SelectedService.Title}"

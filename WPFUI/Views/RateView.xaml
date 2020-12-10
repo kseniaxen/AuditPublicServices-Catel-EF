@@ -7,6 +7,8 @@
                   xmlns:viewModels="clr-namespace:WPFUI.ViewModels"
                   Width="450"
                   Height="225"
+                  MinWidth="450"
+                  MinHeight="225"
                   ResizeMode="CanResize"
                   SizeToContent="Manual"
                   d:DataContext="{d:DesignInstance viewModels:RateViewModel,  IsDesignTimeCreatable=True}"

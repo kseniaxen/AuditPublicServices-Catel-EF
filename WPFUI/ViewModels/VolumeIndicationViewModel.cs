@@ -86,7 +86,7 @@ namespace WPFUI.ViewModels
                 SetValue(SelectedDateProperty, value); }
         }
         public static readonly PropertyData SelectedDateProperty = RegisterProperty("VISelectedDate", typeof(DateTime));
-
+        public override string Title { get { return "Indication Management"; } }
         public VolumeIndicationViewModel(VolumeIndication volumeIndication = null, ObservableCollection<Address> addressCol=null, ObservableCollection<Service> serviceCol = null, ObservableCollection<Rate> rateCol = null)
         {
             VIObject = volumeIndication ?? new VolumeIndication();

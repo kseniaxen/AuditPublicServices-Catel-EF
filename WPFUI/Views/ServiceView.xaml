@@ -7,6 +7,8 @@
                   xmlns:viewModels="clr-namespace:WPFUI.ViewModels"
                   Width="450"
                   Height="200"
+                  MinWidth="450"
+                  MinHeight="200"
                   ResizeMode="CanResize"
                   SizeToContent="Manual"
                   d:DataContext="{d:DesignInstance viewModels:ServiceViewModel,  IsDesignTimeCreatable=True}"
