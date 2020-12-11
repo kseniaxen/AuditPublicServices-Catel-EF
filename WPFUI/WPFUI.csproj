@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <StartupObject />
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <ApplicationIcon>Resources\Icons\logo.ico</ApplicationIcon>

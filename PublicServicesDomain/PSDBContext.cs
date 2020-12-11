@@ -10,9 +10,14 @@ namespace PublicServicesDomain
 {
     public class PSDBContext : DbContext
     {
-        public PSDBContext():base("DbConnection")
-        {
+        //public PSDBContext():base("DbConnection")
+        //{
 
+        //}
+        static string connectionString = "data source=(localdb)\\MSSQLLocalDB;Initial Catalog=PubServDB;Integrated Security=True;";
+        public PSDBContext() : base(connectionString)
+        {
+            
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
